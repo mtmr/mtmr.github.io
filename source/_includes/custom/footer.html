@@ -25,7 +25,7 @@
   <div id="footer-second" class="footer-widget">
     <h3>Recent Posts</h3>
     <section id="hatena-popular" class="hatena-bookmark">
-      <script language="javascript" type="text/javascript" src="http://b.hatena.ne.jp/js/widget.js" charset="utf-8"></script>
+<      <script language="javascript" type="text/javascript" src="http://b.hatena.ne.jp/js/widget.js" charset="utf-8"></script>
       <script language="javascript" type="text/javascript">
         Hatena.BookmarkWidget.url   = "{{ site.url }}";
         Hatena.BookmarkWidget.title = "Recent Posts";
@@ -34,7 +34,7 @@
         Hatena.BookmarkWidget.num   = 10;
         Hatena.BookmarkWidget.theme = "notheme";
         Hatena.BookmarkWidget.load();
-      </script>
+</script> 
     </section>
   </div><!-- /div#footer-second -->
 
@@ -50,7 +50,14 @@
         Hatena.BookmarkWidget.num   = 10;
         Hatena.BookmarkWidget.theme = "notheme";
         Hatena.BookmarkWidget.load();
-      </script>
+</script> >
+<!--ul id="recent_posts">
+	 {% for post in site.posts limit: site.recent_posts %}
+	  <li class="post">
+		 <a href="{{ root_url }}{{ post.url }}">{{ post.title }}</a>
+	 </li>
+	    {% endfor %}
+</ul -->
     </section>
   </div><!-- /div#footer-third -->
 </div><!-- /div#footer-widgets-wrapper -->
