@@ -4,7 +4,7 @@
   <title><![CDATA[muthu raj]]></title>
   <link href="http://mtmr.github.io/atom.xml" rel="self"/>
   <link href="http://mtmr.github.io/"/>
-  <updated>2015-01-11T21:35:03+05:30</updated>
+  <updated>2015-01-11T21:46:19+05:30</updated>
   <id>http://mtmr.github.io/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -70,7 +70,7 @@ want certain special meanings (<code>`</code>,<code>\\</code>, <code>$</code>) t
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Knowledge of commandline utlities</h2>
+<h2>Knowledge of commandline utilities</h2>
 
 <p>It is unfair to expect everyone to know all the available command line utilites especially when they are not using it on a daily basis. However <code>apropos</code> can be of much help.</p>
 
