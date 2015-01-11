@@ -1,0 +1,81 @@
+@mixin mask-image($img, $repeat: no-repeat){
+  @include experimental(mask-image, image-url($img), -webkit, -moz, -o, -ms);
+  @include experimental(mask-repeat, $repeat, -webkit, -moz, -o, -ms);
+  width: image-width($img);
+  height: image-height($img);
+}
+
+@mixin shadow-box($border: #fff .5em solid, $shadow: rgba(#000, .15) 0 1px 4px, $border-radius: .3em) {
+  @include border-radius($border-radius);
+  @include box-shadow($shadow);
+  @include box-sizing(border-box);
+  border: $border;
+}
+
+@mixin selection($bg, $color: inherit, $text-shadow: none){
+  * {
+    &::-moz-selection { background: $bg; color: $color; text-shadow: $text-shadow; }
+    &::-webkit-selection { background: $bg; color: $color; text-shadow: $text-shadow; }
+    &::selection { background: $bg; color: $color; text-shadow: $text-shadow; }
+  }
+}
+
+@function text-color($color, $dark: dark, $light: light){
+  $text-color: ( (red($color)*299) + (green($color)*587) + (blue($color)*114) ) / 1000;
+  $text-color: if($text-color >= 150, $dark, $light);
+  @return $text-color;
+}
+
+@mixin clearfix {
+  zoom: 1;
+
+  &:before,
+  &:after {
+    display: block;
+    height: 0;
+    visibility: hidden;
+    content: "\0020";
+  }
+
+  &:after {
+    clear: both;
+  }
+}
+
+/* Zurui Line
+ *
+ * Sample:
+ *    @include line-top(.1, .2);
+ */
+@mixin line-top($op1: .2, $op2: .3){
+	border-top: 1px solid rgba(0, 0, 0, $op1);
+	@include box-shadow(rgba(255, 255, 255, $op2) 0 1px 0 inset);
+}
+@mixin line-bottom($op1: .2, $op2: .3){
+	border-bottom: 1px solid rgba(0, 0, 0, $op1);
+	@include box-shadow(rgba(255, 255, 255, $op2)0 1px 0);
+}
+@mixin line-left($op1: .2, $op2: .3){
+	border-left: 1px solid rgba(0, 0, 0, $op1);
+	@include box-shadow (rgba(255, 255, 255, $op2) -1px 0 0);
+}
+@mixin line-right($op1: .2, $op: .3){
+	border-right: 1px solid rgba(0, 0, 0, $op1);
+	@include box-shadow(rgba(255, 255, 255, $op2) -1px 0 0 inset);
+}
+
+/* white-box */
+@mixin white-box(){
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+  background-color: #fdfdfd;
+  border-radius: 4px;
+}
+
+/* linear-gradient */
+@mixin linear-gradient($direction, $start, $middle, $end) {
+  background-image: -webkit-linear-gradient($direction, $start, $middle, $end);
+  background-image:    -moz-linear-gradient($direction, $start, $middle, $end);
+  background-image:     -ms-linear-gradient($direction, $start, $middle, $end);
+  background-image:      -o-linear-gradient($direction, $start, $middle, $end);
+}
+
