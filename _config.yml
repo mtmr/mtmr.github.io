@@ -7,7 +7,7 @@ title: Muthu Raj
 subtitle: A 19 year old computer Nerd
 author: Muthu Raj
 simple_search: https://www.google.com/search
-description: Carefully curate musings about programming, shell scripting and Linux
+description: Carefully curated musings about programming, shell scripting and Linux
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -101,4 +101,4 @@ google_analytics_tracking_id: UA-57650939-1
 facebook_like: true
 
 # Gravatar
-gravatar_email: muthurajmuthu15@gmail.com
+gravatar_url: https://secure.gravatar.com/avatar/63682f9f22d49c62c53a968b253eedab.jpg
