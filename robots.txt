@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: http://mtmr.github.io/sitemap.xml
