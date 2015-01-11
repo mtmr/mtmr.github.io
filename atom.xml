@@ -4,7 +4,7 @@
   <title><![CDATA[muthu raj]]></title>
   <link href="http://mtmr.github.io/atom.xml" rel="self"/>
   <link href="http://mtmr.github.io/"/>
-  <updated>2015-01-11T21:54:51+05:30</updated>
+  <updated>2015-01-11T22:58:03+05:30</updated>
   <id>http://mtmr.github.io/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -53,7 +53,7 @@ want certain special meanings (<code>`</code>,<code>\\</code>, <code>$</code>) t
 
 <h2>Command Substitution and filename globbing</h2>
 
-<p>Command susbstitution refers to substituting the standard output of a command to a variable. File name globbing is nothing but expanding filenames using special charcters like <code>*</code>.</p>
+<p>Command substitution refers to substituting the standard output of a command to a variable. File name globbing is nothing but expanding filenames using special characters like <code>*</code>.</p>
 
 <figure class='code'><figcaption><span>Command Substitution and File name globbing</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>

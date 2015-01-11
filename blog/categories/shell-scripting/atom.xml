@@ -4,7 +4,7 @@
   <title><![CDATA[Category: shell scripting | muthu raj]]></title>
   <link href="http://mtmr.github.io/blog/categories/shell-scripting/atom.xml" rel="self"/>
   <link href="http://mtmr.github.io/"/>
-  <updated>2015-01-11T21:54:51+05:30</updated>
+  <updated>2015-01-11T22:58:03+05:30</updated>
   <id>http://mtmr.github.io/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -50,7 +50,7 @@ name=&lsquo;muthu&rsquo;</p>
 
 <pre><code>Command Substitution and filename globbing
 -------------------------------------------------------------------
-Command susbstitution refers to substituting the standard output of a command to a variable. File name globbing is nothing but expanding filenames using special charcters like ``` * ```.
+Command substitution refers to substituting the standard output of a command to a variable. File name globbing is nothing but expanding filenames using special characters like ``` * ```.
 </code></pre>
 
 <p>name=<code>echo $muthu</code></p>
