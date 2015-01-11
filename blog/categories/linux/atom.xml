@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | muthu raj]]></title>
   <link href="http://mtmr.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://mtmr.github.io/"/>
-  <updated>2015-01-11T19:48:10+05:30</updated>
+  <updated>2015-01-11T21:10:09+05:30</updated>
   <id>http://mtmr.github.io/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Understanding the commands used in OS lab]]></title>
     <link href="http://mtmr.github.io/blog/2015/01/11/understanding-the-commands-used-in-lab/"/>
-    <updated>2015-01-11T15:47:42+05:30</updated>
+    <updated>2015-01-11T15:45:42+05:30</updated>
     <id>http://mtmr.github.io/blog/2015/01/11/understanding-the-commands-used-in-lab</id>
     <content type="html"><![CDATA[<p>According to me, mastering the shell scripting required for our lab (or anywhere for that matter) involves <del>three</del> four things..</p>
 
