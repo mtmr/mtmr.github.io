@@ -31,7 +31,7 @@ echo '$name'
 ```
 Command Substitution and filename globbing
 -------------------------------------------------------------------
-Command susbstitution refers to substituting the standard output of a command to a variable. File name globbing is nothing but expanding filenames using special charcters like ``` * ```.
+Command substitution refers to substituting the standard output of a command to a variable. File name globbing is nothing but expanding filenames using special characters like ``` * ```.
 ``` bash Command Substitution and File name globbing
 name=`echo $muthu`
 #Backquotes(`) are used to assign the output of a command to a variable a.k.a Command substitution
@@ -41,7 +41,7 @@ ls *.zip
 #Lists all files with the zip extension. (Recall Wildcards)
 ```
 
-Knowledge of commandline utlities
+Knowledge of commandline utilities
 ---------------------------------------------------
 
 It is unfair to expect everyone to know all the available command line utilites especially when they are not using it on a daily basis. However ``` apropos ``` can be of much help.
