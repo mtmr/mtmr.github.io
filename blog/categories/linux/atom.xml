@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: linux | muthu raj]]></title>
+  <link href="http://muthusblog.com/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://muthusblog.com/"/>
+  <updated>2015-01-12T13:47:13+05:30</updated>
+  <id>http://muthusblog.com/</id>
+  <author>
+    <name><![CDATA[Muthu Raj]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Understanding the commands used in OS lab]]></title>
+    <link href="http://muthusblog.com/blog/2015/01/11/understanding-the-commands-used-in-lab/"/>
+    <updated>2015-01-11T15:45:42+05:30</updated>
+    <id>http://muthusblog.com/blog/2015/01/11/understanding-the-commands-used-in-lab</id>
+    <content type="html"><![CDATA[<p>According to me, mastering the shell scripting required for our lab (or anywhere for that matter) involves <del>three</del> four things..</p>
+
+<ol>
+<li><p>Quoting</p></li>
+<li><p>Command substitution and File name expansion</p></li>
+<li><p>Regular expressions</p></li>
+<li><p>Knowledge of commandline utilities</p></li>
+</ol>
+
+
+<!-- more -->
+
+
+<h2>Quoting</h2>
+
+<p>We already covered quoting in class. In a nutshell, When you want all special meaning for all characters turned off(i.e., when you want to print $1500 using instead of having the shell interpreting it as an attempt to access the value of a variable 1500) you use single quotes. When you
+want certain special meanings (<code>`</code>,<code>\\</code>, <code>$</code>) to be preserved, you use double quotes.
+&#8220;` bash Quoting
+name=&lsquo;muthu&rsquo;</p>
+
+<h1>note the single quotes and spacing. Double quotes work too.</h1>
+
+<p>echo &ldquo;$name&rdquo;</p>
+
+<h1>Prints out muthu. Retains special meaning of $</h1>
+
+<p>echo &lsquo;$name&rsquo;</p>
+
+<h1>Prints out $name.</h1>
+
+<pre><code>Command Substitution and filename globbing
+-------------------------------------------------------------------
+Command substitution refers to substituting the standard output of a command to a variable. File name globbing is nothing but expanding filenames using special characters like ``` * ```.
+</code></pre>
+
+<p>name=<code>echo $muthu</code></p>
+
+<h1>Backquotes(`) are used to assign the output of a command to a variable a.k.a Command substitution</h1>
+
+<p>name=$(echo &ldquo;muthu&rdquo;)</p>
+
+<h1>Another method for command substitution.</h1>
+
+<p>ls *.zip</p>
+
+<h1>Lists all files with the zip extension. (Recall Wildcards)</h1>
+
+<pre><code>
+Knowledge of commandline utilities
+---------------------------------------------------
+
+It is unfair to expect everyone to know all the available command line utilites especially when they are not using it on a daily basis. However ``` apropos ``` can be of much help.
+
+Regular Expressions
+------------------------------
+Regular expressions is not a topic I can explain in a single post. Note that the topic in itself is not so complicated. **_I_** do not know it enough to explain so easily. However, I will concentrate on explaining the commands and programs we used in last lab session. (First five will be covered in this post)
+Sed is a text stream manipulator. It can read through a text file line by line and perform modifications and print them to standard output. And it uses regular expressions to search through the text. The general syntax for the most widely used substitution command of sed is this
+</code></pre>
+
+<p>sed -n &rsquo;s/something/somethingelse/[p][g]&lsquo; filename
+<code>
+The sed is the command name while</code> -n <code>option asks the utility to suppress normal output and print only what is specified. (The stuff that follows)</code> s <code>means we want the tool to *substitute* the</code> something <code>into</code> somethingelse <code>and the last two optional flags(marked by the presence of square brackets around them) tell that we want the result to be printed and the we want the expression to be applied globally (By default, only the first something is replaced by somethingelse).
+</code> bash Sed basics
+echo &ldquo;muthu&rdquo; | sed -n &rsquo;s/muthu/muthuraj/p&rsquo;</p>
+
+<h1>the above command replaces muthu by muthuraj</h1>
+
+<p>echo &ldquo;muthu&rdquo; | sed -n &rsquo;s/([a-z][a-z]*)/&amp;raj/p&#8217;</p>
+
+<h1>the above command does the same but uses regular expressions.</h1>
+
+<pre><code>Sed command to delete first character of each line in a file
+------------------------------
+(We'll assume that there is a file called sample.txt in your current ditrectory)
+</code></pre>
+
+<p>sed &rsquo;s/^.//&lsquo; sample.txt
+<code>
+Note:</code> / &#8220;` is a seperator between the action, search for pattern and the replacement pattern.</p>
+
+<p>The above command is split as follows:</p>
+
+<p><code>s</code> - substitute</p>
+
+<p><code>^.</code> - <code>^</code> Denotes the beginning of a line. It is what we call an anchor character. <code>.</code> asks the tool to match exactly one character no matter what kind of character</p>
+
+<p><code>//</code> - Nothing between the slashes denotes we replace a single charcter with nothing, thereby &ldquo;deleting&rdquo; that character</p>
+
+<h2>Sed command to delete the last character of each line in a file</h2>
+
+<pre><code class="bash ">sed 's/.$//' sample.txt
+</code></pre>
+
+<p><code>s</code>- substitute</p>
+
+<p><code>.$</code> - <code>$</code> Denotes the end of a line. <code>.</code> matches exactly one character no matter what kind of character</p>
+
+<p><code>//</code>- Nothing between the slashes denotes we replace a single charcter with nothing, thereby &ldquo;deleting&rdquo; that character</p>
+
+<h2>Sed Command to swap two words </h2>
+
+<pre><code class="bash Sed to swap two words">sed 's/\([a-z][a-z]*\) /\([a-z][a-z]*\) /\2 \1/' sample.txt
+</code></pre>
+
+<p>Here, it gets a little more complicated.</p>
+
+<p>The <code>\(</code>after the first <code>/</code>denotes that we want to use a open bracket to group the pattern. We use the <code>\</code> to turn on a special meaning for the <code>( </code>. (It is complicated. We&rsquo;ll come back to that another day&hellip;..) Same goes for <code>\)</code>.</p>
+
+<p>Now that we have eliminated the escaped Brackets, We&rsquo;ll come to the patterns, between the slashes.</p>
+
+<p><code>[a-z]</code> denotes that we have to match any chracter in the range a-z. Repeating that a second time with a <code>*</code> suffixed and results in selecting a single letter word at the minimum. <code>*</code> denotes the tool will select the pattern preceding it zero or more times. If we include the pattern [a-z] and suffix it with a <code>*</code> it will match nothing too(Read the previous line about <code>*</code> again) zero or more times. The second set selects another word.</p>
+
+<p><code>/\2 \1/ </code> swaps the first and second words ans separates them by a space.</p>
+
+<p>Note: Above version does not work for words with uppercase letters or with symbols like ASK or won&rsquo;t.</p>
+
+<h2>Pipe you /etc/passwd to awk and print it</h2>
+
+<pre><code class="bash AWK">cat /etc/passwd | awk "{print $7}"
+</code></pre>
+
+<p><code>cat</code> prints everything in the file to standard output. You pipe it to awk using <code>|</code> and ask awk to print the seventh column by saying <code>"{ print $7}"</code>.</p>
+
+<h2>Develop an interactive grep script that asks for a word and a file name and then tells how many lines contain that word</h2>
+
+<pre><code class="bash ">#! /bin/bash
+echo "Enter the word:"
+read word
+echo "Enter the file name:"
+read file
+grep -c $word $file
+exit 0
+</code></pre>
+
+<p>Nothing to explain here.</p>
+
+<p>I will continue the next post as soon as I get a chance. Comment below if you have any doubts. Also, any and all feedback is welcome.</p>
+
+<p>Many thanks to Sankara Narayanan for proof reading.</p>
+]]></content>
+  </entry>
+  
+</feed>
