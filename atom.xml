@@ -4,7 +4,7 @@
   <title><![CDATA[muthu raj]]></title>
   <link href="http://muthusblog.com/atom.xml" rel="self"/>
   <link href="http://muthusblog.com/"/>
-  <updated>2015-01-19T13:04:56+05:30</updated>
+  <updated>2015-01-20T20:06:07+05:30</updated>
   <id>http://muthusblog.com/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -12,6 +12,122 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Sed - A Microprimer]]></title>
+    <link href="http://muthusblog.com/blog/2015/01/20/sed-a-microprimer/"/>
+    <updated>2015-01-20T18:07:38+05:30</updated>
+    <id>http://muthusblog.com/blog/2015/01/20/sed-a-microprimer</id>
+    <content type="html"><![CDATA[<p>Note: This is a draft of a much longer post. Work in progress.</p>
+
+<p>Hello. This a quick introduction to the Sed utility found in unix-based operating systems. Sed is a contraction of <strong>S</strong>tream <strong>ed</strong>itor. It is a non-interactive text manipulator that manipulates text files, line by line. It is very powerful and can save hours of manual text editing with simple one line commands. This is not a complete guide to Sed. For that, you may want to look at the book <em>Sed and Awk</em> published by O&#8217;Reilly. Also, sed can handle scripts which can specify mutliple actions to be done. However this primer does not cover that topic and we will restrict ourselves to commands that can fit on one line.</p>
+
+<!-- more -->
+
+
+<p>The General syntax of a sed command is</p>
+
+<p style="text-align:center;"> <code>sed [-n] [-e] [address1[,address2]][!] command [arguments]</code></p>
+
+<p>All the options within square brackets are optional. Lets see what the options mean now.</p>
+
+<ul>
+<li><p><code>-n</code> - Suppress normal output</p></li>
+<li><p><code>-e</code> - Tells the sed that following argument is a command. This is useful when multiple commands are specified in the same line.</p></li>
+<li><p><code>[address1[,address2]]</code> - The address range in the input text on which the follwing commands will be executed. Note that address can be specified as a range or only specify the beginning line (sed assumes that last line is the end address) or omitted entirely. Address can be specified as either line numbers or as search patterns which will result in the address being the line which contains the search pattern.</p></li>
+<li><p><code>!</code> - This tells sed to process lines <strong>other</strong> than the ones specified in the address range.</p></li>
+</ul>
+
+
+<p>An example will clear things up..</p>
+
+<p>(You can execute these commands from each line in the terminal)</p>
+
+<figure class='code'><figcaption><span>Sed Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> <span class="s2">&quot;John Connor&quot;</span> <span class="p">|</span> sed p
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;John Connor&quot;</span> <span class="p">|</span> sed -n p
+</span><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n 1,4 p
+</span><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n /John/,/of/ p
+</span><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;/John/,/of/!p&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Output</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>1. John Connor
+</span><span class='line'>
+</span><span class='line'>   John Connor
+</span><span class='line'>
+</span><span class='line'>2. John Connor
+</span><span class='line'>
+</span><span class='line'>3. John
+</span><span class='line'>
+</span><span class='line'>   Connor
+</span><span class='line'>
+</span><span class='line'>   is
+</span><span class='line'>
+</span><span class='line'>   the
+</span><span class='line'>
+</span><span class='line'>4. John
+</span><span class='line'>
+</span><span class='line'>   Connor
+</span><span class='line'>
+</span><span class='line'>   is
+</span><span class='line'>
+</span><span class='line'>   the
+</span><span class='line'>
+</span><span class='line'>   leader
+</span><span class='line'>
+</span><span class='line'>   of
+</span><span class='line'>
+</span><span class='line'>5. resistance
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Most commonly used commands</h2>
+
+<p><code>p</code> - Prints input lines when used alone. Prints the input pattern when used along with <code>s</code> command.</p>
+
+<p><code>s</code> - Substitutes the search pattern with a replacement pattern</p>
+
+<p><code>c</code> - Changes the text in the given address-range to a replacement text.</p>
+
+<p><code>y</code> - Replaces the search pattern character by character using the replacement pattern</p>
+
+<p>To be continued&hellip;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The story of Operating systems]]></title>
