@@ -1,10 +1,11 @@
 ---
 layout: page
 title: "Linux"
-date: 2015-01-11 22:35
 comments: true
 sharing: true
 footer: true
 ---
 
-Welcome to Linux portal. I'll try to bundle up all the Linux related posts here. Happy Hacking :)
+Welcome to the Linux portal. I'll try to bundle up all the Linux related posts here. Happy Hacking :)
+
+* A nice read for a few smug smiles.... [The story of operating systems](http://muthusblog.com/blog/2015/01/19/the-story-of-operating-systems/)
