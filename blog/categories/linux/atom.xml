@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | muthu raj]]></title>
   <link href="http://muthusblog.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://muthusblog.com/"/>
-  <updated>2015-01-20T20:06:07+05:30</updated>
+  <updated>2015-01-20T23:22:59+05:30</updated>
   <id>http://muthusblog.com/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -18,7 +18,7 @@
     <link href="http://muthusblog.com/blog/2015/01/20/sed-a-microprimer/"/>
     <updated>2015-01-20T18:07:38+05:30</updated>
     <id>http://muthusblog.com/blog/2015/01/20/sed-a-microprimer</id>
-    <content type="html"><![CDATA[<p>Note: This is a draft of a much longer post. Work in progress.</p>
+    <content type="html"><![CDATA[<p><del>Note: This is a draft of a much longer post. Work in progress.</del></p>
 
 <p>Hello. This a quick introduction to the Sed utility found in unix-based operating systems. Sed is a contraction of <strong>S</strong>tream <strong>ed</strong>itor. It is a non-interactive text manipulator that manipulates text files, line by line. It is very powerful and can save hours of manual text editing with simple one line commands. This is not a complete guide to Sed. For that, you may want to look at the book <em>Sed and Awk</em> published by O&#8217;Reilly. Also, sed can handle scripts which can specify mutliple actions to be done. However this primer does not cover that topic and we will restrict ourselves to commands that can fit on one line.</p>
 
@@ -46,7 +46,7 @@
 <pre><code class="bash Sed Example">echo "John Connor" | sed p
 echo "John Connor" | sed -n p
 echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n 1,4 p
-echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n /John/,/of/ p
+echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n /John/,/of/p
 echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n '/John/,/of/!p'
 </code></pre>
 
@@ -116,7 +116,70 @@ Most commonly used commands</p></li>
 
 <p><code>y</code> - Replaces the search pattern character by character using the replacement pattern</p>
 
-<p>To be continued&hellip;</p>
+<h1>Command Syntax and Usage Examples</h1>
+
+<h2>Substitute </h2>
+
+<p>The syntax and usage of <code>p</code> command has been demonstrated already. Let&rsquo;s see <code>s</code> now.</p>
+
+<p>Syntax for <code>s</code> command is as follows&hellip;</p>
+
+<p style="text-align:center;"> <code>sed [-n] [address1[,address2]][!]s/search pattern/replacement pattern/[p][g]</code></p>
+
+<p>While it may seem really complex, it is very easy. Here is an example. Outputs are below each command as comments.</p>
+
+<pre><code class="bash">echo muthu | sed -n 's/muthu/muthuraj/p'
+#muthuraj
+echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n '/John/,/of/s/John/John J./'
+#John J.
+echo "John John John John" | sed -n 's/John/Paul/'
+#Paul John John John
+echo "John John John John" | sed -n 's/John/Paul/g'
+#Paul Paul Paul Paul
+</code></pre>
+
+<p>Don&rsquo;t worry if you don&rsquo;t understand these&hellip; We will see a primer on regular expressions soon&hellip;(I know it should&rsquo;ve beeen first. Sorry!!) Watch out for the session announcement..</p>
+
+<pre><code class="bash Substituting using regular expressions">echo "This is a sentence" | sed 's/\(^[A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/p' # swap first two words
+#is This a sentence
+echo "This is a sentence" | sed 's/\([A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/gp' # swap all word pairs
+#is This sentence a
+</code></pre>
+
+<p>You can combine address ranges in above commands and have the words swapped over a range of lines or lines that have a certain pattern.</p>
+
+<h2>Change</h2>
+
+<p>Syntax for change <code>c</code> command is as follows&hellip;
+ <code>sed [address1[,address2]]c\
+    replacement text</code></p>
+
+<pre><code class="bash Change in sed">echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed  '/John/,/of/c\
+Changed'
+#Changed
+#of
+</code></pre>
+
+<p>Note that All of the lines in the given range are changed to the gicen text. You can have multiple lines of replacement text. Also after the <code>\</code> you should press <code>Enter</code> before entering the replacement text.</p>
+
+<h2><code>y</code> Command</h2>
+
+<p>This is somewhat akin to the <code>tr</code> command in unix&hellip;.</p>
+
+<p>Syntax for <code>y</code> command is as follows&hellip;</p>
+
+<p style="text-align:center;"> <code>sed [address1[,address2]]y/search/replacement/p</code></p>
+
+<pre><code class="bash ">echo -e "java" | sed y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/
+#JAVA
+</code></pre>
+
+<p>Above command changes from lowercase to uppercase.
+Characters in search pattern are replaced by corresponding characters in replacement pattern.</p>
+
+<p>We will see more later&hellip; Comment if you have feedback/doubts&hellip; :)</p>
+
+<p>Many thanks to Loshmitha for proof-reading&hellip;.</p>
 ]]></content>
   </entry>
   
