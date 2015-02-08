@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | muthu raj]]></title>
   <link href="http://muthusblog.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://muthusblog.com/"/>
-  <updated>2015-02-08T16:55:33+05:30</updated>
+  <updated>2015-02-08T21:23:50+05:30</updated>
   <id>http://muthusblog.com/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -26,9 +26,9 @@ So without further ado, jump in&hellip;</p>
 
 <h2>Creating a process</h2>
 
-<p>A process is <em>a program in the midst of execution</em>. Apart from the text section, it also has memory space, open resources, internal information and whole lot of scary details. Which the OS will abstract for you.  So far so good. So how do you create a process? Since the process is a program in execution you can just create a process by running a program right? Yes and No. There is no universal createprocess() or spawn() methos. You cannot create a process like that. SO how does it happen then?</p>
+<p>A process is <em>a program in the midst of execution</em>. Apart from the text section, it also has memory space, open resources, internal information and whole lot of scary details (which the OS will abstract for you).  So far so good. So how do you create a process? Since the process is a program in execution you can just create a process by running a program right? Yes and No. There is no universal createprocess() or spawn() methos. You cannot create a process like that. SO how does it happen then?</p>
 
-<p>In unix all process start off as copies of their parent process. i.e., They start of as clones of their parents. Ten they assume their own ID on the decision of their parents ( Whoever decided this must be Indian ). So how are the clones created then? Simple. By means of the clone() method. But mostly we won&rsquo;t use that method directly. We will call clone indirectly using a function called fork(). (Which is software jargon for copying). fork() is defined in the header <code>unistd.h</code>. Here is the syntax:</p>
+<p>In unix all process start off as copies of their parent process. i.e., They start of as clones of their parents. Then they assume their own ID on the decision of their parents ( whoever decided this must be Indian ). So how are the clones created then? Simple. By means of the clone() method. But mostly we won&rsquo;t use that method directly. We will call clone indirectly using a function called fork(). (Which is software jargon for copying). fork() is defined in the header <code>unistd.h</code>. Here is the syntax:</p>
 
 <p style="text-align:center;"> <code>pid_t fork(void)</code></p>
 
@@ -60,7 +60,7 @@ int main(void)
 
 <p>What happens is, when fork() is executed, the cloning takes place. And until the cloning is finished, the parent is in blocked or waiting state. When it is finished, the processes resume execution at a point right after the fork call. Now remember how the <code>fork()</code> call returns a value (that I told you was PID). Well here is where it gets a little tricky.
 The <code>fork()</code> call returns twice. Once for the parent process and once for the child. And in the case of a parent process, it returns the actual PID. In case of child though, it returns 0. Which is not the PID. Because only the scheduler has the PID of 0. Even the <code>init</code> process which is the first process to be executed doesn&rsquo;t get 0. It gets a 1 for PID. So, the fact to be taken into account here is that in case of child process the <code>fork()</code> doesn&rsquo;t actually return the PID. Instead it returns 0 so that we can identify it is a child. Note that this is done because the actual PID will be some positive integer which cannot be predicted and hence cannot be used to identify the child.
-So far so good. Now. What exactly is the use of forking a method? For simple programs like the ones we demoed above, where a single program has both parent and child code, this may be fine. But for complex programs where we want to execute a separate program this approach may not be suitable. Which is where exec() comes into picture.</p>
+Everything is fine so far. Now, what exactly is the use of forking a method? For simple programs like the ones we demoed above, where a single program has both parent and child code, this may be fine. But for complex programs where we want to execute a separate program this approach may not be suitable. Which is where exec() comes into picture.</p>
 
 <h2>There is no function called exec()</h2>
 
@@ -97,6 +97,8 @@ Remember though that you have to give exact path name of the program.</p>
 <h2>Next post</h2>
 
 <p>Probably in 2 days. We will see InterProcess Communication using named pipes (FIFOs) and using semaphores. Watch this space. Suggestions and comments are welcome.</p>
+
+<p>Many Thanks to Faizaan Mohammed for pointing out typos and grammar mistakes.</p>
 ]]></content>
   </entry>
   
