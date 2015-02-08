@@ -14,9 +14,9 @@ So without further ado, jump in...
 Creating a process
 -------------------
 
-A process is *a program in the midst of execution*. Apart from the text section, it also has memory space, open resources, internal information and whole lot of scary details. Which the OS will abstract for you.  So far so good. So how do you create a process? Since the process is a program in execution you can just create a process by running a program right? Yes and No. There is no universal createprocess() or spawn() methos. You cannot create a process like that. SO how does it happen then?
+A process is *a program in the midst of execution*. Apart from the text section, it also has memory space, open resources, internal information and whole lot of scary details (which the OS will abstract for you).  So far so good. So how do you create a process? Since the process is a program in execution you can just create a process by running a program right? Yes and No. There is no universal createprocess() or spawn() methos. You cannot create a process like that. SO how does it happen then?
 
-In unix all process start off as copies of their parent process. i.e., They start of as clones of their parents. Ten they assume their own ID on the decision of their parents ( Whoever decided this must be Indian ). So how are the clones created then? Simple. By means of the clone() method. But mostly we won't use that method directly. We will call clone indirectly using a function called fork(). (Which is software jargon for copying). fork() is defined in the header `unistd.h`. Here is the syntax:
+In unix all process start off as copies of their parent process. i.e., They start of as clones of their parents. Then they assume their own ID on the decision of their parents ( whoever decided this must be Indian ). So how are the clones created then? Simple. By means of the clone() method. But mostly we won't use that method directly. We will call clone indirectly using a function called fork(). (Which is software jargon for copying). fork() is defined in the header `unistd.h`. Here is the syntax:
 
 -> `pid_t fork(void)` <-
 
@@ -50,7 +50,7 @@ int main(void)
 
 What happens is, when fork() is executed, the cloning takes place. And until the cloning is finished, the parent is in blocked or waiting state. When it is finished, the processes resume execution at a point right after the fork call. Now remember how the `fork()` call returns a value (that I told you was PID). Well here is where it gets a little tricky.
 The `fork()` call returns twice. Once for the parent process and once for the child. And in the case of a parent process, it returns the actual PID. In case of child though, it returns 0. Which is not the PID. Because only the scheduler has the PID of 0. Even the `init` process which is the first process to be executed doesn't get 0. It gets a 1 for PID. So, the fact to be taken into account here is that in case of child process the `fork()` doesn't actually return the PID. Instead it returns 0 so that we can identify it is a child. Note that this is done because the actual PID will be some positive integer which cannot be predicted and hence cannot be used to identify the child.
-So far so good. Now. What exactly is the use of forking a method? For simple programs like the ones we demoed above, where a single program has both parent and child code, this may be fine. But for complex programs where we want to execute a separate program this approach may not be suitable. Which is where exec() comes into picture.
+Everything is fine so far. Now, what exactly is the use of forking a method? For simple programs like the ones we demoed above, where a single program has both parent and child code, this may be fine. But for complex programs where we want to execute a separate program this approach may not be suitable. Which is where exec() comes into picture.
 
 There is no function called exec()
 ----------------------------------
@@ -91,3 +91,5 @@ Next post
 --------------
 
 Probably in 2 days. We will see InterProcess Communication using named pipes (FIFOs) and using semaphores. Watch this space. Suggestions and comments are welcome.
+
+Many Thanks to Faizaan Mohammed for pointing out typos and grammar mistakes. 
