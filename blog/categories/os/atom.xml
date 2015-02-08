@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: os | muthu raj]]></title>
+  <link href="http://muthusblog.com/blog/categories/os/atom.xml" rel="self"/>
+  <link href="http://muthusblog.com/"/>
+  <updated>2015-02-08T07:44:14+05:30</updated>
+  <id>http://muthusblog.com/</id>
+  <author>
+    <name><![CDATA[Muthu Raj]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Understanding fork() and exec()]]></title>
+    <link href="http://muthusblog.com/blog/2015/02/07/understanding-fork-and-exec/"/>
+    <updated>2015-02-07T20:46:59+05:30</updated>
+    <id>http://muthusblog.com/blog/2015/02/07/understanding-fork-and-exec</id>
+    <content type="html"><![CDATA[<p>Hello. This is the first of a series of articles intended to accompany the  Operating systems course and helps to get the basic of System Programming.
+So without further ado, jump in&hellip;</p>
+
+<!-- more -->
+
+
+<h2>Creating a process</h2>
+
+<p>A process is <em>a program in the midst of execution</em>. Apart from the text section, it also has memory space, open resources, internal information and whole lot of scary details. Which the OS will abstract for you.  So far so good. So how do you create a process? Since the process is a program in execution you can just create a process by running a program right? Yes and No. There is no universal createprocess() or spawn() methos. You cannot create a process like that. SO how does it happen then?</p>
+
+<p>In unix all process start off as copies of their parent process. i.e., They start of as clones of their parents. Ten they assume their own ID on the decision of their parents ( Whoever decided this must be Indian ). So how are the clones created then? Simple. By means of the clone() method. But mostly we won&rsquo;t use that method directly. We will call clone indirectly using a function called fork(). (Which is software jargon for copying). fork() is defined in the header <code>unistd.h</code>. Here is the syntax:</p>
+
+<p style="text-align:center;"> <code>pid_t fork(void)</code></p>
+
+<p>It returns the PID of the process if the fork is successful. And it takes no parameters. So let&rsquo;s see a simple program that forks a process.</p>
+
+<pre><code class="c forking.c">
+#include&lt;stdio.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;sys/types.h&gt;
+int main(void)
+{
+  pid_t pid; //Holds the return value of fork()
+  pid = fork();
+  if(pid == 0) //fork is successful and we are in child process
+  {
+    printf("Hello world from child process");
+  }
+  else if (pid == -1) //fork has failed
+  {
+    printf("Forking failed :( )"); //Print an error message to stdin and exit
+  }
+  else //fork done and parent version runs
+  {
+    printf("This is parent process");
+  }
+  return 0;
+}
+</code></pre>
+
+<p>What happens is, when fork() is executed, the cloning takes place. And until the cloning is finished, the parent is in blocked or waiting state. When it is finished, the processes resume execution at a point right after the fork call. Now remember how the <code>fork()</code> call returns a value (that I told you was PID). Well here is where it gets a little tricky.
+The <code>fork()</code> call returns twice. Once for the parent process and once for the child. And in the case of a parent process, it returns the actual PID. In case of child though, it returns 0. Which is not the PID. Because only the scheduler has the PID of 0. Even the <code>init</code> process which is the first process to be executed doesn&rsquo;t get 0. It gets a 1 for PID. So, the fact to be taken into account here is that in case of child process the <code>fork()</code> doesn&rsquo;t actually return the PID. Instead it returns 0 so that we can identify it is a child. Note that this is done because the actual PID will be some positive integer which cannot be predicted and hence cannot be used to identify the child.
+So far so good. Now. What exactly is the use of forking a method? For simple programs like the ones we demoed above, where a single program has both parent and child code, this may be fine. But for complex programs where we want to execute a separate program this approach may not be suitable. Which is where exec() comes into picture.</p>
+
+<h2>There is no function called exec()</h2>
+
+<p>Yes. <code>exec()</code> is the name of a family of functions that execute another program. The one we will see here is <code>execl()</code>. Let&rsquo;s see a program and then an explanation.</p>
+
+<pre><code class="c">
+
+#include&lt;stdio.h&gt;
+#include&lt;unistd.h&gt;
+#include&lt;sys/types.h&gt;
+int main(void)
+{
+  pid_t pid; //Holds the return value of fork()
+  pid = fork();
+  if(pid == 0) //fork is successful and we are in child process
+  {
+    execl("/bin/ls", "", *char(0)); //program name, commandline argument to the program, null pointer for terminating the list of parameters
+  }
+  else if (pid == -1) //fork has failed
+  {
+  printf("Forking failed :( )"); //Print an error message to stdin and exit
+  }
+else //fork done and parent version runs
+  {
+  printf("This is parent process and I was waiting till child was finished.");
+  }
+return 0;
+}
+</code></pre>
+
+<p>The function call and the comment following it pretty much sums it up. When <code>exec()</code> is called, it <em>overwrites</em> the memory space of the process. i.e., none of that parent process&rsquo;s memory space is now accessible. Other than that, everything is fine.
+Remember though that you have to give exact path name of the program.</p>
+
+<h2>Next post</h2>
+
+<p>Probably in 2 days. We will see InterProcess Communication using named pipes (FIFOs) and using semaphores. Watch this space. Suggestions and comments are welcome.</p>
+]]></content>
+  </entry>
+  
+</feed>

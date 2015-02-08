@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://muthusblog.com/blog/2015/02/07/understanding-fork-and-exec/</loc>
+    <lastmod>2015-02-07T20:46:59+05:30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://muthusblog.com/blog/2015/01/20/sed-a-microprimer/</loc>
     <lastmod>2015-01-20T18:07:38+05:30</lastmod>
     <priority>0.8</priority>
@@ -17,43 +22,43 @@
   </url>
   <url>
     <loc>http://muthusblog.com/404.html</loc>
-    <lastmod>2015-01-20T23:22:59+05:30</lastmod>
+    <lastmod>2015-02-08T07:44:14+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://muthusblog.com/archives/</loc>
-    <lastmod>2015-01-20T23:22:59+05:30</lastmod>
+    <lastmod>2015-02-08T07:44:14+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://muthusblog.com/</loc>
-    <lastmod>2015-01-20T23:22:59+05:30</lastmod>
+    <lastmod>2015-02-08T07:44:14+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://muthusblog.com/hello-world/</loc>
-    <lastmod>2015-01-20T23:22:59+05:30</lastmod>
+    <lastmod>2015-02-08T07:44:14+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://muthusblog.com/404/</loc>
-    <lastmod>2015-01-20T23:22:59+05:30</lastmod>
+    <lastmod>2015-02-08T07:44:14+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://muthusblog.com/linux/</loc>
-    <lastmod>2015-01-20T23:22:59+05:30</lastmod>
+    <lastmod>2015-02-08T07:44:14+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://muthusblog.com/about/</loc>
-    <lastmod>2015-01-20T23:22:59+05:30</lastmod>
+    <lastmod>2015-02-08T07:44:14+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
