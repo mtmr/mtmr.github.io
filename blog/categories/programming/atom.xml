@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: programming | muthu raj]]></title>
+  <link href="http://muthusblog.com/blog/categories/programming/atom.xml" rel="self"/>
+  <link href="http://muthusblog.com/"/>
+  <updated>2015-02-15T17:32:55+05:30</updated>
+  <id>http://muthusblog.com/</id>
+  <author>
+    <name><![CDATA[Muthu Raj]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Douglas Crockford - Javascript]]></title>
+    <link href="http://muthusblog.com/blog/2015/02/15/douglas-crockford-javascript/"/>
+    <updated>2015-02-15T15:02:42+05:30</updated>
+    <id>http://muthusblog.com/blog/2015/02/15/douglas-crockford-javascript</id>
+    <content type="html"><![CDATA[<h2>Javascript - By Douglas Crockford</h2>
+
+<p>This is one of the best videos on a programming language I have seen. And since its availability is spotty, I&rsquo;ve uploaded it to my Google Drive and embedded it here. Copyright belongs to Yahoo!.</p>
+
+<div align = "center">
+<iframe src="https://docs.google.com/file/d/0B-QbWCkLjW6qQjhyeUMwUkVLSDg/preview" width="640" height="480"></iframe>
+</div>
+
+
+
+]]></content>
+  </entry>
+  
+</feed>
