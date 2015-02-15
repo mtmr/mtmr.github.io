@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | muthu raj]]></title>
   <link href="http://muthusblog.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://muthusblog.com/"/>
-  <updated>2015-02-15T17:32:55+05:30</updated>
+  <updated>2015-02-15T23:07:43+05:30</updated>
   <id>http://muthusblog.com/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -18,58 +18,58 @@
     <link href="http://muthusblog.com/blog/2015/02/07/understanding-fork-and-exec/"/>
     <updated>2015-02-07T20:46:59+05:30</updated>
     <id>http://muthusblog.com/blog/2015/02/07/understanding-fork-and-exec</id>
-    <content type="html"><![CDATA[<p>Hello. This is the first of a series of articles intended to accompany the  Operating systems course and helps to get the basic of System Programming.
-So without further ado, jump in&hellip;</p>
+    <content type="html"><![CDATA[<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?autoload=true&amp;skin=doxy&amp;lang=css" defer="defer"></script>
+
+<p>Hello. This is the first of a series of articles intended to accompany the  Operating systems course and helps to get the basic of System Programming.
+So without further ado, jump in…</p>
 
 <!-- more -->
 
+<h2 id="creating-a-process">Creating a process</h2>
 
-<h2>Creating a process</h2>
+<p>A process is <em>a program in the midst of execution</em>. Apart from the text section, it also has memory space, open resources, internal information and whole lot of scary details (which the OS will abstract for you).  So far so good. So how do you create a process? Since the process is a program in execution you can just create a process by running a program right? Yes and No. There is no universal createprocess() or spawn() method. You cannot create a process like that. So how does it happen then?</p>
 
-<p>A process is <em>a program in the midst of execution</em>. Apart from the text section, it also has memory space, open resources, internal information and whole lot of scary details (which the OS will abstract for you).  So far so good. So how do you create a process? Since the process is a program in execution you can just create a process by running a program right? Yes and No. There is no universal createprocess() or spawn() methos. You cannot create a process like that. SO how does it happen then?</p>
+<p>In unix all process start off as copies of their parent process. i.e., They start of as clones of their parents. Then they assume their own ID on the decision of their parents ( whoever decided this must be Indian ). So how are the clones created then? Simple. By means of the clone() method. But mostly we won’t use that method directly. We will call clone indirectly using a function called fork(). (Which is software jargon for copying). fork() is defined in the header <code>unistd.h</code>. Here is the syntax:</p>
 
-<p>In unix all process start off as copies of their parent process. i.e., They start of as clones of their parents. Then they assume their own ID on the decision of their parents ( whoever decided this must be Indian ). So how are the clones created then? Simple. By means of the clone() method. But mostly we won&rsquo;t use that method directly. We will call clone indirectly using a function called fork(). (Which is software jargon for copying). fork() is defined in the header <code>unistd.h</code>. Here is the syntax:</p>
-
-<p style="text-align:center;"> <code>pid_t fork(void)</code></p>
-
-<p>It returns the PID of the process if the fork is successful. And it takes no parameters. So let&rsquo;s see a simple program that forks a process.</p>
-
-<pre><code class="c forking.c">
-#include&lt;stdio.h&gt;
-#include&lt;unistd.h&gt;
-#include&lt;sys/types.h&gt;
-int main(void)
-{
-  pid_t pid; //Holds the return value of fork()
-  pid = fork();
-  if(pid == 0) //fork is successful and we are in child process
-  {
-    printf("Hello world from child process");
-  }
-  else if (pid == -1) //fork has failed
-  {
-    printf("Forking failed :( )"); //Print an error message to stdin and exit
-  }
-  else //fork done and parent version runs
-  {
-    printf("This is parent process");
-  }
-  return 0;
-}
+<pre><code>					fork(void)
 </code></pre>
 
-<p>What happens is, when fork() is executed, the cloning takes place. And until the cloning is finished, the parent is in blocked or waiting state. When it is finished, the processes resume execution at a point right after the fork call. Now remember how the <code>fork()</code> call returns a value (that I told you was PID). Well here is where it gets a little tricky.
-The <code>fork()</code> call returns twice. Once for the parent process and once for the child. And in the case of a parent process, it returns the actual PID. In case of child though, it returns 0. Which is not the PID. Because only the scheduler has the PID of 0. Even the <code>init</code> process which is the first process to be executed doesn&rsquo;t get 0. It gets a 1 for PID. So, the fact to be taken into account here is that in case of child process the <code>fork()</code> doesn&rsquo;t actually return the PID. Instead it returns 0 so that we can identify it is a child. Note that this is done because the actual PID will be some positive integer which cannot be predicted and hence cannot be used to identify the child.
+<p>It returns the PID of the process if the fork is successful. And it takes no parameters. So let’s see a simple program that forks a process.</p>
+
+<p>&#8220;` C++</p>
+
+<h1 id="include-stdioh">include <stdio.h></stdio.h></h1>
+<p>#include <unistd.h>
+#include &lt;sys/types.h&gt;
+int main(void) {
+    printf(&#8220;%ld  %ld&#8221;, (long)getpid(), (long)getppid());
+    pid_t pid = fork();
+    if(pid == 0)
+    {
+    	printf(&#8220;Hello World %ld&#8221;, (long)getpid());
+    	execl(&#8220;/bin/ls&#8221;, &#8220;-a&#8221;,(char *)0);
+    }
+    else
+    	if(pid == -1)
+    		printf(&#8220;Failed&#8221;);
+    else
+    	printf(&#8220;HEllo Small world %ld&#8221;, (long)getpid());
+    return 0;
+}</unistd.h></p>
+
+<p>&#8220;`
+What happens is, when fork() is executed, the cloning takes place. And until the cloning is finished, the parent is in blocked or waiting state. When it is finished, the processes resume execution at a point right after the fork call. Now remember how the <code>fork()</code> call returns a value (that I told you was PID). Well here is where it gets a little tricky.
+The <code>fork()</code> call returns twice. Once for the parent process and once for the child. And in the case of a parent process, it returns the actual PID. In case of child though, it returns 0. Which is not the PID. Because only the scheduler has the PID of 0. Even the <code>init</code> process which is the first process to be executed doesn’t get 0. It gets a 1 for PID. So, the fact to be taken into account here is that in case of child process the <code>fork()</code> doesn’t actually return the PID. Instead it returns 0 so that we can identify it is a child. Note that this is done because the actual PID will be some positive integer which cannot be predicted and hence cannot be used to identify the child.
 Everything is fine so far. Now, what exactly is the use of forking a method? For simple programs like the ones we demoed above, where a single program has both parent and child code, this may be fine. But for complex programs where we want to execute a separate program this approach may not be suitable. Which is where exec() comes into picture.</p>
 
-<h2>There is no function called exec()</h2>
+<h2 id="there-is-no-function-called-exec">There is no function called exec()</h2>
 
-<p>Yes. <code>exec()</code> is the name of a family of functions that execute another program. The one we will see here is <code>execl()</code>. Let&rsquo;s see a program and then an explanation.</p>
+<p>Yes. <code>exec()</code> is the name of a family of functions that execute another program. The one we will see here is <code>execl()</code>. Let’s see a program and then an explanation.</p>
 
-<pre><code class="c">
+<p>&#8220;` C++</p>
 
-#include&lt;stdio.h&gt;
-#include&lt;unistd.h&gt;
+<h1 id="includestdioh">include<stdio.h></stdio.h></h1>
+<p>#include<unistd.h>
 #include&lt;sys/types.h&gt;
 int main(void)
 {
@@ -77,28 +77,29 @@ int main(void)
   pid = fork();
   if(pid == 0) //fork is successful and we are in child process
   {
-    execl("/bin/ls", "", *char(0)); //program name, commandline argument to the program, null pointer for terminating the list of parameters
+    execl(&#8220;/bin/ls&#8221;, &#8220;&#8221;, *char(0)); //program name, commandline argument to the program, null pointer for terminating the list of parameters
   }
   else if (pid == -1) //fork has failed
   {
-  printf("Forking failed :( )"); //Print an error message to stdin and exit
+  printf(&#8220;Forking failed :( )&#8221;); //Print an error message to stdin and exit
   }
 else //fork done and parent version runs
   {
-  printf("This is parent process and I was waiting till child was finished.");
+  printf(&#8220;This is parent process and I was waiting till child was finished.&#8221;);
   }
 return 0;
-}
-</code></pre>
+}</unistd.h></p>
 
-<p>The function call and the comment following it pretty much sums it up. When <code>exec()</code> is called, it <em>overwrites</em> the memory space of the process. i.e., none of that parent process&rsquo;s memory space is now accessible. Other than that, everything is fine.
+<p>&#8220;`</p>
+
+<p>The function call and the comment following it pretty much sums it up. When <code>exec()</code> is called, it <em>overwrites</em> the memory space of the process. i.e., none of that parent process’s memory space is now accessible. Other than that, everything is fine.
 Remember though that you have to give exact path name of the program.</p>
 
-<h2>Next post</h2>
+<h2 id="next-post">Next post</h2>
 
 <p>Probably in 2 days. We will see InterProcess Communication using named pipes (FIFOs) and using semaphores. Watch this space. Suggestions and comments are welcome.</p>
 
-<p>Many Thanks to Faizaan Mohammed for pointing out typos and grammar mistakes.</p>
+<p>Many Thanks to Faizaan Mohammed for pointing out typos and grammar mistakes. </p>
 ]]></content>
   </entry>
   
@@ -107,37 +108,43 @@ Remember though that you have to give exact path name of the program.</p>
     <link href="http://muthusblog.com/blog/2015/01/20/sed-a-microprimer/"/>
     <updated>2015-01-20T18:07:38+05:30</updated>
     <id>http://muthusblog.com/blog/2015/01/20/sed-a-microprimer</id>
-    <content type="html"><![CDATA[<p><del>Note: This is a draft of a much longer post. Work in progress.</del></p>
+    <content type="html"><![CDATA[<p>~~Note: This is a draft of a much longer post. Work in progress.~~</p>
 
-<p>Hello. This a quick introduction to the Sed utility found in unix-based operating systems. Sed is a contraction of <strong>S</strong>tream <strong>ed</strong>itor. It is a non-interactive text manipulator that manipulates text files, line by line. It is very powerful and can save hours of manual text editing with simple one line commands. This is not a complete guide to Sed. For that, you may want to look at the book <em>Sed and Awk</em> published by O&#8217;Reilly. Also, sed can handle scripts which can specify mutliple actions to be done. However this primer does not cover that topic and we will restrict ourselves to commands that can fit on one line.</p>
+<p>Hello. This a quick introduction to the Sed utility found in unix-based operating systems. Sed is a contraction of __S__tream __ed__itor. It is a non-interactive text manipulator that manipulates text files, line by line. It is very powerful and can save hours of manual text editing with simple one line commands. This is not a complete guide to Sed. For that, you may want to look at the book <em>Sed and Awk</em> published by O’Reilly. Also, sed can handle scripts which can specify mutliple actions to be done. However this primer does not cover that topic and we will restrict ourselves to commands that can fit on one line.
+<!-- more --></p>
 
-<!-- more -->
+<p>The General syntax of a sed command is </p>
 
-
-<p>The General syntax of a sed command is</p>
-
-<p style="text-align:center;"> <code>sed [-n] [-e] [address1[,address2]][!] command [arguments]</code></p>
+<p>-&gt; ` sed [-n] [-e] [address1[,address2]][!] command [arguments] ` &lt;-</p>
 
 <p>All the options within square brackets are optional. Lets see what the options mean now.</p>
 
 <ul>
-<li><p><code>-n</code> - Suppress normal output</p></li>
-<li><p><code>-e</code> - Tells the sed that following argument is a command. This is useful when multiple commands are specified in the same line.</p></li>
-<li><p><code>[address1[,address2]]</code> - The address range in the input text on which the follwing commands will be executed. Note that address can be specified as a range or only specify the beginning line (sed assumes that last line is the end address) or omitted entirely. Address can be specified as either line numbers or as search patterns which will result in the address being the line which contains the search pattern.</p></li>
-<li><p><code>!</code> - This tells sed to process lines <strong>other</strong> than the ones specified in the address range.</p></li>
+  <li>
+    <p><code>-n</code> - Suppress normal output </p>
+  </li>
+  <li>
+    <p><code>-e</code> - Tells the sed that following argument is a command. This is useful when multiple commands are specified in the same line.</p>
+  </li>
+  <li>
+    <p><code>[address1[,address2]]</code> - The address range in the input text on which the follwing commands will be executed. Note that address can be specified as a range or only specify the beginning line (sed assumes that last line is the end address) or omitted entirely. Address can be specified as either line numbers or as search patterns which will result in the address being the line which contains the search pattern.</p>
+  </li>
+  <li>
+    <p><code>!</code> - This tells sed to process lines <strong>other</strong> than the ones specified in the address range.</p>
+  </li>
 </ul>
-
 
 <p>An example will clear things up..</p>
 
 <p>(You can execute these commands from each line in the terminal)</p>
 
-<pre><code class="bash Sed Example">echo "John Connor" | sed p
+<p><code>bash Sed Example
+echo "John Connor" | sed p
 echo "John Connor" | sed -n p
 echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n 1,4 p
 echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n /John/,/of/p
 echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n '/John/,/of/!p'
-</code></pre>
+</code></p>
 
 <p><strong>Output</strong>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -165,39 +172,52 @@ echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n '/John/,/of/!p'
 <span class='line-number'>23</span>
 <span class='line-number'>24</span>
 <span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>1. John Connor&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;   John Connor&lt;/p&gt;
+</span><span class='line'>&lt;p&gt;John Connor&lt;/p&gt;
 </span><span class='line'>
 </span><span class='line'>&lt;ol&gt;
-</span><span class='line'>&lt;li&gt;&lt;p&gt;John Connor&lt;/p&gt;&lt;/li&gt;
-</span><span class='line'>&lt;li&gt;&lt;p&gt;John&lt;/p&gt;
+</span><span class='line'>  &lt;li&gt;
+</span><span class='line'>    &lt;p&gt;John Connor&lt;/p&gt;
+</span><span class='line'>  &lt;/li&gt;
+</span><span class='line'>  &lt;li&gt;
+</span><span class='line'>    &lt;p&gt;John&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;Connor&lt;/p&gt;
+</span><span class='line'>    &lt;p&gt;Connor&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;is&lt;/p&gt;
+</span><span class='line'>    &lt;p&gt;is&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;the&lt;/p&gt;&lt;/li&gt;
-</span><span class='line'>&lt;li&gt;&lt;p&gt;John&lt;/p&gt;
+</span><span class='line'>    &lt;p&gt;the&lt;/p&gt;
+</span><span class='line'>  &lt;/li&gt;
+</span><span class='line'>  &lt;li&gt;
+</span><span class='line'>    &lt;p&gt;John&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;Connor&lt;/p&gt;
+</span><span class='line'>    &lt;p&gt;Connor&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;is&lt;/p&gt;
+</span><span class='line'>    &lt;p&gt;is&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;the&lt;/p&gt;
+</span><span class='line'>    &lt;p&gt;the&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;leader&lt;/p&gt;
+</span><span class='line'>    &lt;p&gt;leader&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;of&lt;/p&gt;&lt;/li&gt;
-</span><span class='line'>&lt;li&gt;&lt;p&gt;resistance
+</span><span class='line'>    &lt;p&gt;of&lt;/p&gt;
+</span><span class='line'>  &lt;/li&gt;
+</span><span class='line'>  &lt;li&gt;
+</span><span class='line'>    &lt;p&gt;resistance
 </span></code></pre></td></tr></table></div></figure>
-Most commonly used commands</p></li>
+Most commonly used commands
+—————————</p>
+  </li>
 </ol>
 
-
-<hr />
-
-<p><code>p</code> - Prints input lines when used alone. Prints the input pattern when used along with <code>s</code> command.</p>
+<p><code>p</code> - Prints input lines when used alone. Prints the input pattern when used along with <code>s</code> command. </p>
 
 <p><code>s</code> - Substitutes the search pattern with a replacement pattern</p>
 
@@ -205,19 +225,20 @@ Most commonly used commands</p></li>
 
 <p><code>y</code> - Replaces the search pattern character by character using the replacement pattern</p>
 
-<h1>Command Syntax and Usage Examples</h1>
+<h1 id="command-syntax-and-usage-examples">Command Syntax and Usage Examples</h1>
 
-<h2>Substitute </h2>
+<h2 id="substitute">Substitute</h2>
 
-<p>The syntax and usage of <code>p</code> command has been demonstrated already. Let&rsquo;s see <code>s</code> now.</p>
+<p>The syntax and usage of <code>p</code> command has been demonstrated already. Let’s see <code>s</code> now.</p>
 
-<p>Syntax for <code>s</code> command is as follows&hellip;</p>
+<p>Syntax for <code>s</code> command is as follows…</p>
 
-<p style="text-align:center;"> <code>sed [-n] [address1[,address2]][!]s/search pattern/replacement pattern/[p][g]</code></p>
+<p>-&gt; <code>sed [-n] [address1[,address2]][!]s/search pattern/replacement pattern/[p][g]</code> &lt;-</p>
 
 <p>While it may seem really complex, it is very easy. Here is an example. Outputs are below each command as comments.</p>
 
-<pre><code class="bash">echo muthu | sed -n 's/muthu/muthuraj/p'
+<p><code>bash
+echo muthu | sed -n 's/muthu/muthuraj/p'
 #muthuraj
 echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n '/John/,/of/s/John/John J./'
 #John J.
@@ -225,50 +246,52 @@ echo "John John John John" | sed -n 's/John/Paul/'
 #Paul John John John
 echo "John John John John" | sed -n 's/John/Paul/g'
 #Paul Paul Paul Paul
-</code></pre>
+</code>
+Don’t worry if you don’t understand these… We will see a primer on regular expressions soon…(I know it should’ve beeen first. Sorry!!) Watch out for the session announcement..</p>
 
-<p>Don&rsquo;t worry if you don&rsquo;t understand these&hellip; We will see a primer on regular expressions soon&hellip;(I know it should&rsquo;ve beeen first. Sorry!!) Watch out for the session announcement..</p>
-
-<pre><code class="bash Substituting using regular expressions">echo "This is a sentence" | sed 's/\(^[A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/p' # swap first two words
+<p><code>bash Substituting using regular expressions
+echo "This is a sentence" | sed 's/\(^[A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/p' # swap first two words
 #is This a sentence
 echo "This is a sentence" | sed 's/\([A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/gp' # swap all word pairs
 #is This sentence a
-</code></pre>
+</code></p>
 
 <p>You can combine address ranges in above commands and have the words swapped over a range of lines or lines that have a certain pattern.</p>
 
-<h2>Change</h2>
+<h2 id="change">Change</h2>
 
-<p>Syntax for change <code>c</code> command is as follows&hellip;
- <code>sed [address1[,address2]]c\
-    replacement text</code></p>
+<p>Syntax for change <code>c</code> command is as follows…
+ ` sed [address1[,address2]]c\
+	replacement text`</p>
 
-<pre><code class="bash Change in sed">echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed  '/John/,/of/c\
+<p><code>bash Change in sed
+echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed  '/John/,/of/c\
 Changed'
 #Changed
 #of
-</code></pre>
+</code></p>
 
 <p>Note that All of the lines in the given range are changed to the gicen text. You can have multiple lines of replacement text. Also after the <code>\</code> you should press <code>Enter</code> before entering the replacement text.</p>
 
-<h2><code>y</code> Command</h2>
+<h2 id="y-command"><code>y</code> Command</h2>
 
-<p>This is somewhat akin to the <code>tr</code> command in unix&hellip;.</p>
+<p>This is somewhat akin to the <code>tr</code> command in unix….</p>
 
-<p>Syntax for <code>y</code> command is as follows&hellip;</p>
+<p>Syntax for <code>y</code> command is as follows…</p>
 
-<p style="text-align:center;"> <code>sed [address1[,address2]]y/search/replacement/p</code></p>
+<p>-&gt; <code>sed [address1[,address2]]y/search/replacement/p</code> &lt;-</p>
 
-<pre><code class="bash ">echo -e "java" | sed y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/
+<p><code>bash 
+echo -e "java" | sed y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/
 #JAVA
-</code></pre>
+</code></p>
 
 <p>Above command changes from lowercase to uppercase.
 Characters in search pattern are replaced by corresponding characters in replacement pattern.</p>
 
-<p>We will see more later&hellip; Comment if you have feedback/doubts&hellip; :)</p>
+<p>We will see more later… Comment if you have feedback/doubts… :)</p>
 
-<p>Many thanks to Loshmitha for proof-reading&hellip;.</p>
+<p>Many thanks to Loshmitha for proof-reading….</p>
 ]]></content>
   </entry>
   
@@ -277,16 +300,14 @@ Characters in search pattern are replaced by corresponding characters in replace
     <link href="http://muthusblog.com/blog/2015/01/19/the-story-of-operating-systems/"/>
     <updated>2015-01-19T12:54:57+05:30</updated>
     <id>http://muthusblog.com/blog/2015/01/19/the-story-of-operating-systems</id>
-    <content type="html"><![CDATA[<h2>An excerpt from <em>In the Beginnning was the commandline</em> by <strong>Neal Stephenson</strong></h2>
-
-<h1>MGBs, TANKS, AND BATMOBILES</h1>
+    <content type="html"><![CDATA[<h2 id="an-excerpt-from-in-the-beginnning-was-the-commandline-by-neal-stephenson">An excerpt from <em>In the Beginnning was the commandline</em> by <strong>Neal Stephenson</strong></h2>
+<p>MGBs, TANKS, AND BATMOBILES
+===========================</p>
 
 <p>Imagine a crossroads where four competing auto dealerships are situated. One of them (Microsoft) is much, much bigger than the others. It started out years ago selling three-speed bicycles (MS-DOS); these were not perfect, but they worked, and when they broke you could easily fix them.
 There was a competing bicycle dealership next door (Apple) that one day began selling motorized vehicles—expensive but attractively styled cars with their innards hermetically sealed, so that how they worked was something of a mystery.</p>
 
 <!-- more -->
-
-
 <p>The big dealership responded by rushing a moped upgrade kit (the original Windows) onto the market. This was a Rube Goldberg contraption that, when bolted onto a three-speed bicycle, enabled it to keep up, just barely, with Apple-cars. The users had to wear goggles and were always picking bugs out of their teeth while Apple owners sped along in hermetically sealed comfort, sneering out the windows. But the Micro-mopeds were cheap, and easy to fix compared with the Apple-cars, and their market share waxed.</p>
 
 <p>Eventually the big dealership came out with a full-fledged car: a colossal station wagon (Windows 95). It had all the aesthetic appeal of a Soviet worker housing block, it leaked oil and blew gaskets, and it was an enormous success. A little later, they also came out with a hulking off-road vehicle intended for industrial users (Windows NT), which was no more beautiful than the station wagon and only a little more reliable.</p>
@@ -327,85 +348,73 @@ The Batmobile outlet sells a few vehicles to the occasional car nut who wants a 
     <link href="http://muthusblog.com/blog/2015/01/11/understanding-the-commands-used-in-lab/"/>
     <updated>2015-01-11T15:45:42+05:30</updated>
     <id>http://muthusblog.com/blog/2015/01/11/understanding-the-commands-used-in-lab</id>
-    <content type="html"><![CDATA[<p>According to me, mastering the shell scripting required for our lab (or anywhere for that matter) involves <del>three</del> four things..</p>
+    <content type="html"><![CDATA[<p>According to me, mastering the shell scripting required for our lab (or anywhere for that matter) involves ~~three~~ four things..</p>
 
 <ol>
-<li><p>Quoting</p></li>
-<li><p>Command substitution and File name expansion</p></li>
-<li><p>Regular expressions</p></li>
-<li><p>Knowledge of commandline utilities</p></li>
+  <li>
+    <p>Quoting</p>
+  </li>
+  <li>
+    <p>Command substitution and File name expansion</p>
+  </li>
+  <li>
+    <p>Regular expressions</p>
+  </li>
+  <li>
+    <p>Knowledge of commandline utilities</p>
+  </li>
 </ol>
 
-
 <!-- more -->
-
-
-<h2>Quoting</h2>
-
-<p>We already covered quoting in class. In a nutshell, When you want all special meaning for all characters turned off(i.e., when you want to print $1500 using instead of having the shell interpreting it as an attempt to access the value of a variable 1500) you use single quotes. When you
-want certain special meanings (<code>`</code>,<code>\\</code>, <code>$</code>) to be preserved, you use double quotes.
-&#8220;` bash Quoting
-name=&lsquo;muthu&rsquo;</p>
-
-<h1>note the single quotes and spacing. Double quotes work too.</h1>
-
-<p>echo &ldquo;$name&rdquo;</p>
-
-<h1>Prints out muthu. Retains special meaning of $</h1>
-
-<p>echo &lsquo;$name&rsquo;</p>
-
-<h1>Prints out $name.</h1>
-
-<pre><code>Command Substitution and filename globbing
+<p>Quoting
+————
+We already covered quoting in class. In a nutshell, When you want all special meaning for all characters turned off(i.e., when you want to print $1500 using instead of having the shell interpreting it as an attempt to access the value of a variable 1500) you use single quotes. When you 
+want certain special meanings (<code>`,</code><code> \\ </code><code>,</code><code> $ </code><code>) to be preserved, you use double quotes.
+</code><code> bash Quoting
+name='muthu'
+#note the single quotes and spacing. Double quotes work too.
+echo "$name"
+#Prints out muthu. Retains special meaning of $
+echo '$name'
+#Prints out $name.
+</code><code>
+Command Substitution and filename globbing
 -------------------------------------------------------------------
-Command substitution refers to substituting the standard output of a command to a variable. File name globbing is nothing but expanding filenames using special characters like ``` * ```.
-</code></pre>
+Command substitution refers to substituting the standard output of a command to a variable. File name globbing is nothing but expanding filenames using special characters like</code><code> * </code><code>.
+</code><code> bash Command Substitution and File name globbing
+name=</code>echo $muthu<code>
+#Backquotes(</code>) are used to assign the output of a command to a variable a.k.a Command substitution
+name=$(echo “muthu”)
+#Another method for command substitution.
+ls *.zip
+#Lists all files with the zip extension. (Recall Wildcards)
+&#8220;`</p>
 
-<p>name=<code>echo $muthu</code></p>
+<h2 id="knowledge-of-commandline-utilities">Knowledge of commandline utilities</h2>
 
-<h1>Backquotes(`) are used to assign the output of a command to a variable a.k.a Command substitution</h1>
+<p>It is unfair to expect everyone to know all the available command line utilites especially when they are not using it on a daily basis. However <code>apropos</code> can be of much help.</p>
 
-<p>name=$(echo &ldquo;muthu&rdquo;)</p>
-
-<h1>Another method for command substitution.</h1>
-
-<p>ls *.zip</p>
-
-<h1>Lists all files with the zip extension. (Recall Wildcards)</h1>
-
-<pre><code>
-Knowledge of commandline utilities
----------------------------------------------------
-
-It is unfair to expect everyone to know all the available command line utilites especially when they are not using it on a daily basis. However ``` apropos ``` can be of much help.
-
-Regular Expressions
-------------------------------
-Regular expressions is not a topic I can explain in a single post. Note that the topic in itself is not so complicated. **_I_** do not know it enough to explain so easily. However, I will concentrate on explaining the commands and programs we used in last lab session. (First five will be covered in this post)
+<h2 id="regular-expressions">Regular Expressions</h2>
+<p>Regular expressions is not a topic I can explain in a single post. Note that the topic in itself is not so complicated. <strong><em>I</em></strong> do not know it enough to explain so easily. However, I will concentrate on explaining the commands and programs we used in last lab session. (First five will be covered in this post)
 Sed is a text stream manipulator. It can read through a text file line by line and perform modifications and print them to standard output. And it uses regular expressions to search through the text. The general syntax for the most widely used substitution command of sed is this
-</code></pre>
+<code>bash
+sed -n 's/something/somethingelse/[p][g]' filename
+</code> 
+The sed is the command name while <code>-n</code> option asks the utility to suppress normal output and print only what is specified. (The stuff that follows) <code>s</code> means we want the tool to <em>substitute</em> the <code>something</code> into <code>somethingelse</code> and the last two optional flags(marked by the presence of square brackets around them) tell that we want the result to be printed and the we want the expression to be applied globally (By default, only the first something is replaced by somethingelse).
+<code>bash Sed basics
+echo "muthu" | sed -n 's/muthu/muthuraj/p'
+#the above command replaces muthu by muthuraj
+echo "muthu" | sed -n 's/\([a-z][a-z]*\)/&amp;raj/p'
+#the above command does the same but uses regular expressions.
+</code>
+Sed command to delete first character of each line in a file
+——————————
+(We’ll assume that there is a file called sample.txt in your current ditrectory)</p>
 
-<p>sed -n &rsquo;s/something/somethingelse/[p][g]&lsquo; filename
-<code>
-The sed is the command name while</code> -n <code>option asks the utility to suppress normal output and print only what is specified. (The stuff that follows)</code> s <code>means we want the tool to *substitute* the</code> something <code>into</code> somethingelse <code>and the last two optional flags(marked by the presence of square brackets around them) tell that we want the result to be printed and the we want the expression to be applied globally (By default, only the first something is replaced by somethingelse).
-</code> bash Sed basics
-echo &ldquo;muthu&rdquo; | sed -n &rsquo;s/muthu/muthuraj/p&rsquo;</p>
-
-<h1>the above command replaces muthu by muthuraj</h1>
-
-<p>echo &ldquo;muthu&rdquo; | sed -n &rsquo;s/([a-z][a-z]*)/&amp;raj/p&#8217;</p>
-
-<h1>the above command does the same but uses regular expressions.</h1>
-
-<pre><code>Sed command to delete first character of each line in a file
-------------------------------
-(We'll assume that there is a file called sample.txt in your current ditrectory)
-</code></pre>
-
-<p>sed &rsquo;s/^.//&lsquo; sample.txt
-<code>
-Note:</code> / &#8220;` is a seperator between the action, search for pattern and the replacement pattern.</p>
+<p><code>bash 
+sed 's/^.//' sample.txt
+</code>
+Note: <code>/</code> is a seperator between the action, search for pattern and the replacement pattern.</p>
 
 <p>The above command is split as follows:</p>
 
@@ -413,55 +422,54 @@ Note:</code> / &#8220;` is a seperator between the action, search for pattern an
 
 <p><code>^.</code> - <code>^</code> Denotes the beginning of a line. It is what we call an anchor character. <code>.</code> asks the tool to match exactly one character no matter what kind of character</p>
 
-<p><code>//</code> - Nothing between the slashes denotes we replace a single charcter with nothing, thereby &ldquo;deleting&rdquo; that character</p>
+<p><code>//</code> - Nothing between the slashes denotes we replace a single charcter with nothing, thereby “deleting” that character</p>
 
-<h2>Sed command to delete the last character of each line in a file</h2>
-
-<pre><code class="bash ">sed 's/.$//' sample.txt
-</code></pre>
-
-<p><code>s</code>- substitute</p>
+<h2 id="sed-command-to-delete-the-last-character-of-each-line-in-a-file">Sed command to delete the last character of each line in a file</h2>
+<p><code>bash 
+sed 's/.$//' sample.txt
+</code>
+<code>s</code>- substitute</p>
 
 <p><code>.$</code> - <code>$</code> Denotes the end of a line. <code>.</code> matches exactly one character no matter what kind of character</p>
 
-<p><code>//</code>- Nothing between the slashes denotes we replace a single charcter with nothing, thereby &ldquo;deleting&rdquo; that character</p>
+<p><code>//</code>- Nothing between the slashes denotes we replace a single charcter with nothing, thereby “deleting” that character</p>
 
-<h2>Sed Command to swap two words </h2>
+<h2 id="sed-command-to-swap-two-words">Sed Command to swap two words</h2>
+<p><code>bash Sed to swap two words
+sed 's/\([a-z][a-z]*\) /\([a-z][a-z]*\) /\2 \1/' sample.txt
+</code>
+Here, it gets a little more complicated. </p>
 
-<pre><code class="bash Sed to swap two words">sed 's/\([a-z][a-z]*\) /\([a-z][a-z]*\) /\2 \1/' sample.txt
-</code></pre>
+<p>The <code>\(</code>after the first <code>/</code>denotes that we want to use a open bracket to group the pattern. We use the <code>\</code> to turn on a special meaning for the <code>( </code>. (It is complicated. We’ll come back to that another day…..) Same goes for <code>\)</code>.</p>
 
-<p>Here, it gets a little more complicated.</p>
-
-<p>The <code>\(</code>after the first <code>/</code>denotes that we want to use a open bracket to group the pattern. We use the <code>\</code> to turn on a special meaning for the <code>( </code>. (It is complicated. We&rsquo;ll come back to that another day&hellip;..) Same goes for <code>\)</code>.</p>
-
-<p>Now that we have eliminated the escaped Brackets, We&rsquo;ll come to the patterns, between the slashes.</p>
+<p>Now that we have eliminated the escaped Brackets, We’ll come to the patterns, between the slashes.</p>
 
 <p><code>[a-z]</code> denotes that we have to match any chracter in the range a-z. Repeating that a second time with a <code>*</code> suffixed and results in selecting a single letter word at the minimum. <code>*</code> denotes the tool will select the pattern preceding it zero or more times. If we include the pattern [a-z] and suffix it with a <code>*</code> it will match nothing too(Read the previous line about <code>*</code> again) zero or more times. The second set selects another word.</p>
 
-<p><code>/\2 \1/ </code> swaps the first and second words ans separates them by a space.</p>
+<p><code>/\2 \1/ </code> swaps the first and second words ans separates them by a space. </p>
 
-<p>Note: Above version does not work for words with uppercase letters or with symbols like ASK or won&rsquo;t.</p>
+<p>Note: Above version does not work for words with uppercase letters or with symbols like ASK or won’t.</p>
 
-<h2>Pipe you /etc/passwd to awk and print it</h2>
-
-<pre><code class="bash AWK">cat /etc/passwd | awk "{print $7}"
-</code></pre>
+<h2 id="pipe-you-etcpasswd-to-awk-and-print-it">Pipe you /etc/passwd to awk and print it</h2>
+<p><code>bash AWK
+cat /etc/passwd | awk "{print $7}"
+</code></p>
 
 <p><code>cat</code> prints everything in the file to standard output. You pipe it to awk using <code>|</code> and ask awk to print the seventh column by saying <code>"{ print $7}"</code>.</p>
 
-<h2>Develop an interactive grep script that asks for a word and a file name and then tells how many lines contain that word</h2>
+<h2 id="develop-an-interactive-grep-script-that-asks-for-a-word-and-a-file-name-and-then-tells-how-many-lines-contain-that-word">Develop an interactive grep script that asks for a word and a file name and then tells how many lines contain that word</h2>
 
-<pre><code class="bash ">#! /bin/bash
+<p><code>bash 
+#! /bin/bash
 echo "Enter the word:"
 read word
 echo "Enter the file name:"
 read file
 grep -c $word $file
 exit 0
-</code></pre>
+</code></p>
 
-<p>Nothing to explain here.</p>
+<p>Nothing to explain here. </p>
 
 <p>I will continue the next post as soon as I get a chance. Comment below if you have any doubts. Also, any and all feedback is welcome.</p>
 
