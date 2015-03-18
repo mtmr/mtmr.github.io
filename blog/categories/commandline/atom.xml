@@ -4,7 +4,7 @@
   <title><![CDATA[Category: commandline | muthu raj]]></title>
   <link href="http://muthusblog.com/blog/categories/commandline/atom.xml" rel="self"/>
   <link href="http://muthusblog.com/"/>
-  <updated>2015-02-16T23:08:06+05:30</updated>
+  <updated>2015-03-18T17:55:51+05:30</updated>
   <id>http://muthusblog.com/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -18,43 +18,37 @@
     <link href="http://muthusblog.com/blog/2015/01/20/sed-a-microprimer/"/>
     <updated>2015-01-20T18:07:38+05:30</updated>
     <id>http://muthusblog.com/blog/2015/01/20/sed-a-microprimer</id>
-    <content type="html"><![CDATA[<p>~~Note: This is a draft of a much longer post. Work in progress.~~</p>
+    <content type="html"><![CDATA[<p><del>Note: This is a draft of a much longer post. Work in progress.</del></p>
 
-<p>Hello. This a quick introduction to the Sed utility found in unix-based operating systems. Sed is a contraction of __S__tream __ed__itor. It is a non-interactive text manipulator that manipulates text files, line by line. It is very powerful and can save hours of manual text editing with simple one line commands. This is not a complete guide to Sed. For that, you may want to look at the book <em>Sed and Awk</em> published by O’Reilly. Also, sed can handle scripts which can specify mutliple actions to be done. However this primer does not cover that topic and we will restrict ourselves to commands that can fit on one line.
-<!-- more --></p>
+<p>Hello. This a quick introduction to the Sed utility found in unix-based operating systems. Sed is a contraction of <strong>S</strong>tream <strong>ed</strong>itor. It is a non-interactive text manipulator that manipulates text files, line by line. It is very powerful and can save hours of manual text editing with simple one line commands. This is not a complete guide to Sed. For that, you may want to look at the book <em>Sed and Awk</em> published by O&#8217;Reilly. Also, sed can handle scripts which can specify mutliple actions to be done. However this primer does not cover that topic and we will restrict ourselves to commands that can fit on one line.</p>
 
-<p>The General syntax of a sed command is </p>
+<!-- more -->
 
-<p>-&gt; ` sed [-n] [-e] [address1[,address2]][!] command [arguments] ` &lt;-</p>
+
+<p>The General syntax of a sed command is</p>
+
+<p style="text-align:center;"> <code>sed [-n] [-e] [address1[,address2]][!] command [arguments]</code></p>
 
 <p>All the options within square brackets are optional. Lets see what the options mean now.</p>
 
 <ul>
-  <li>
-    <p><code>-n</code> - Suppress normal output </p>
-  </li>
-  <li>
-    <p><code>-e</code> - Tells the sed that following argument is a command. This is useful when multiple commands are specified in the same line.</p>
-  </li>
-  <li>
-    <p><code>[address1[,address2]]</code> - The address range in the input text on which the follwing commands will be executed. Note that address can be specified as a range or only specify the beginning line (sed assumes that last line is the end address) or omitted entirely. Address can be specified as either line numbers or as search patterns which will result in the address being the line which contains the search pattern.</p>
-  </li>
-  <li>
-    <p><code>!</code> - This tells sed to process lines <strong>other</strong> than the ones specified in the address range.</p>
-  </li>
+<li><p><code>-n</code> - Suppress normal output</p></li>
+<li><p><code>-e</code> - Tells the sed that following argument is a command. This is useful when multiple commands are specified in the same line.</p></li>
+<li><p><code>[address1[,address2]]</code> - The address range in the input text on which the follwing commands will be executed. Note that address can be specified as a range or only specify the beginning line (sed assumes that last line is the end address) or omitted entirely. Address can be specified as either line numbers or as search patterns which will result in the address being the line which contains the search pattern.</p></li>
+<li><p><code>!</code> - This tells sed to process lines <strong>other</strong> than the ones specified in the address range.</p></li>
 </ul>
+
 
 <p>An example will clear things up..</p>
 
 <p>(You can execute these commands from each line in the terminal)</p>
 
-<p><code>bash Sed Example
-echo "John Connor" | sed p
+<pre><code class="bash Sed Example">echo "John Connor" | sed p
 echo "John Connor" | sed -n p
 echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n 1,4 p
 echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n /John/,/of/p
 echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n '/John/,/of/!p'
-</code></p>
+</code></pre>
 
 <p><strong>Output</strong>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -82,52 +76,39 @@ echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n '/John/,/of/!p'
 <span class='line-number'>23</span>
 <span class='line-number'>24</span>
 <span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>1. John Connor&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;John Connor&lt;/p&gt;
+</span><span class='line'>&lt;p&gt;   John Connor&lt;/p&gt;
 </span><span class='line'>
 </span><span class='line'>&lt;ol&gt;
-</span><span class='line'>  &lt;li&gt;
-</span><span class='line'>    &lt;p&gt;John Connor&lt;/p&gt;
-</span><span class='line'>  &lt;/li&gt;
-</span><span class='line'>  &lt;li&gt;
-</span><span class='line'>    &lt;p&gt;John&lt;/p&gt;
+</span><span class='line'>&lt;li&gt;&lt;p&gt;John Connor&lt;/p&gt;&lt;/li&gt;
+</span><span class='line'>&lt;li&gt;&lt;p&gt;John&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>    &lt;p&gt;Connor&lt;/p&gt;
+</span><span class='line'>&lt;p&gt;Connor&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>    &lt;p&gt;is&lt;/p&gt;
+</span><span class='line'>&lt;p&gt;is&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>    &lt;p&gt;the&lt;/p&gt;
-</span><span class='line'>  &lt;/li&gt;
-</span><span class='line'>  &lt;li&gt;
-</span><span class='line'>    &lt;p&gt;John&lt;/p&gt;
+</span><span class='line'>&lt;p&gt;the&lt;/p&gt;&lt;/li&gt;
+</span><span class='line'>&lt;li&gt;&lt;p&gt;John&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>    &lt;p&gt;Connor&lt;/p&gt;
+</span><span class='line'>&lt;p&gt;Connor&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>    &lt;p&gt;is&lt;/p&gt;
+</span><span class='line'>&lt;p&gt;is&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>    &lt;p&gt;the&lt;/p&gt;
+</span><span class='line'>&lt;p&gt;the&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>    &lt;p&gt;leader&lt;/p&gt;
+</span><span class='line'>&lt;p&gt;leader&lt;/p&gt;
 </span><span class='line'>
-</span><span class='line'>    &lt;p&gt;of&lt;/p&gt;
-</span><span class='line'>  &lt;/li&gt;
-</span><span class='line'>  &lt;li&gt;
-</span><span class='line'>    &lt;p&gt;resistance
+</span><span class='line'>&lt;p&gt;of&lt;/p&gt;&lt;/li&gt;
+</span><span class='line'>&lt;li&gt;&lt;p&gt;resistance
 </span></code></pre></td></tr></table></div></figure>
-Most commonly used commands
-—————————</p>
-  </li>
+Most commonly used commands</p></li>
 </ol>
 
-<p><code>p</code> - Prints input lines when used alone. Prints the input pattern when used along with <code>s</code> command. </p>
+
+<hr />
+
+<p><code>p</code> - Prints input lines when used alone. Prints the input pattern when used along with <code>s</code> command.</p>
 
 <p><code>s</code> - Substitutes the search pattern with a replacement pattern</p>
 
@@ -135,20 +116,19 @@ Most commonly used commands
 
 <p><code>y</code> - Replaces the search pattern character by character using the replacement pattern</p>
 
-<h1 id="command-syntax-and-usage-examples">Command Syntax and Usage Examples</h1>
+<h1>Command Syntax and Usage Examples</h1>
 
-<h2 id="substitute">Substitute</h2>
+<h2>Substitute </h2>
 
-<p>The syntax and usage of <code>p</code> command has been demonstrated already. Let’s see <code>s</code> now.</p>
+<p>The syntax and usage of <code>p</code> command has been demonstrated already. Let&#8217;s see <code>s</code> now.</p>
 
-<p>Syntax for <code>s</code> command is as follows…</p>
+<p>Syntax for <code>s</code> command is as follows&#8230;</p>
 
-<p>-&gt; <code>sed [-n] [address1[,address2]][!]s/search pattern/replacement pattern/[p][g]</code> &lt;-</p>
+<p style="text-align:center;"> <code>sed [-n] [address1[,address2]][!]s/search pattern/replacement pattern/[p][g]</code></p>
 
 <p>While it may seem really complex, it is very easy. Here is an example. Outputs are below each command as comments.</p>
 
-<p><code>bash
-echo muthu | sed -n 's/muthu/muthuraj/p'
+<pre><code class="bash">echo muthu | sed -n 's/muthu/muthuraj/p'
 #muthuraj
 echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed -n '/John/,/of/s/John/John J./'
 #John J.
@@ -156,52 +136,50 @@ echo "John John John John" | sed -n 's/John/Paul/'
 #Paul John John John
 echo "John John John John" | sed -n 's/John/Paul/g'
 #Paul Paul Paul Paul
-</code>
-Don’t worry if you don’t understand these… We will see a primer on regular expressions soon…(I know it should’ve beeen first. Sorry!!) Watch out for the session announcement..</p>
+</code></pre>
 
-<p><code>bash Substituting using regular expressions
-echo "This is a sentence" | sed 's/\(^[A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/p' # swap first two words
+<p>Don&#8217;t worry if you don&#8217;t understand these&#8230; We will see a primer on regular expressions soon&#8230;(I know it should&#8217;ve beeen first. Sorry!!) Watch out for the session announcement..</p>
+
+<pre><code class="bash Substituting using regular expressions">echo "This is a sentence" | sed 's/\(^[A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/p' # swap first two words
 #is This a sentence
 echo "This is a sentence" | sed 's/\([A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/gp' # swap all word pairs
 #is This sentence a
-</code></p>
+</code></pre>
 
 <p>You can combine address ranges in above commands and have the words swapped over a range of lines or lines that have a certain pattern.</p>
 
-<h2 id="change">Change</h2>
+<h2>Change</h2>
 
-<p>Syntax for change <code>c</code> command is as follows…
- ` sed [address1[,address2]]c\
-	replacement text`</p>
+<p>Syntax for change <code>c</code> command is as follows&#8230;
+ <code>sed [address1[,address2]]c\
+    replacement text</code></p>
 
-<p><code>bash Change in sed
-echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed  '/John/,/of/c\
+<pre><code class="bash Change in sed">echo -e "John\nConnor\nis\nthe\nleader\nof\nresistance" | sed  '/John/,/of/c\
 Changed'
 #Changed
 #of
-</code></p>
+</code></pre>
 
 <p>Note that All of the lines in the given range are changed to the gicen text. You can have multiple lines of replacement text. Also after the <code>\</code> you should press <code>Enter</code> before entering the replacement text.</p>
 
-<h2 id="y-command"><code>y</code> Command</h2>
+<h2><code>y</code> Command</h2>
 
-<p>This is somewhat akin to the <code>tr</code> command in unix….</p>
+<p>This is somewhat akin to the <code>tr</code> command in unix&#8230;.</p>
 
-<p>Syntax for <code>y</code> command is as follows…</p>
+<p>Syntax for <code>y</code> command is as follows&#8230;</p>
 
-<p>-&gt; <code>sed [address1[,address2]]y/search/replacement/p</code> &lt;-</p>
+<p style="text-align:center;"> <code>sed [address1[,address2]]y/search/replacement/p</code></p>
 
-<p><code>bash 
-echo -e "java" | sed y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/
+<pre><code class="bash ">echo -e "java" | sed y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/
 #JAVA
-</code></p>
+</code></pre>
 
 <p>Above command changes from lowercase to uppercase.
 Characters in search pattern are replaced by corresponding characters in replacement pattern.</p>
 
-<p>We will see more later… Comment if you have feedback/doubts… :)</p>
+<p>We will see more later&#8230; Comment if you have feedback/doubts&#8230; :)</p>
 
-<p>Many thanks to Loshmitha for proof-reading….</p>
+<p>Many thanks to Loshmitha for proof-reading&#8230;.</p>
 ]]></content>
   </entry>
   

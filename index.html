@@ -9,7 +9,7 @@
   <meta name="author" content="Muthu Raj">
 
   
-  <meta name="description" content="RMI execution at a glance.. This is intended to be a quick guide to execute RMI as means for understanding the concept. This is for lab only and is &hellip;">
+  <meta name="description" content="In the last post, we saw forking and executing another program in the child process after forking. Now let us look at basic interprocess &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -73,6 +73,7 @@
   <li><a href="/about">About Me</a></li>
   <li><a href="/linux">Linux</a></li>
   <li><a href="/archives">Archives</a></li>
+  <li><a href="/cv">C.V.</a></li>
 </ul>
 
 </nav>
@@ -80,6 +81,50 @@
       <div id="content">
         <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/03/13/inter-process-communication-using-pipes/">Inter-Process Communication Using Pipes</a></h1>
+    
+    
+      <div class="post-meta">
+        <p class="meta">
+          <span class="timestamp">- 
+
+
+
+
+<time class='entry-date' datetime='2015-03-13T09:13:54+05:30'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:13 am</span></time> -</span>
+          
+          | <a href="/blog/2015/03/13/inter-process-communication-using-pipes/#disqus_thread">Comments</a>
+          
+        </p>
+      </div>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In the last post, we saw forking and executing another program in the child process after forking. Now let us look at basic interprocess communication using pipes.
+Pipes are a means to redirect input and output in such a way that the output of one process becomes the input of another process. We have already seen this in use of sed and grep tools where we&#8217;d pipe the <code>echo's</code> output to the tools and use it. This is the UNIX implementation of pipes for the shell. Let us now see piping in C programs as a means of Inter-process communication in Linux.</p>
+
+<h2>pipe(), close() and read(), write()</h2>
+</div>
+  
+  
+
+
+      <footer>
+      
+      - <a href="/blog/2015/03/13/inter-process-communication-using-pipes/">Inter-Process Communication using Pipes</a>
+      <time datetime="2015-03-13T09:13:54+05:30" pubdate><span class='month'>Mar</span> <span class='day'>13</span> <span class='year'>2015</span></time>
+      
+      <span class="categories">posted in <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/os/'>os</a></span>
+      
+      </footer>
+    </article>
   
   
     <article>
@@ -106,7 +151,7 @@
   </header>
 
 
-  <div class="entry-content"><h2 id="rmi-execution-at-a-glance">RMI execution at a glance..</h2>
+  <div class="entry-content"><h2>RMI execution at a glance..</h2>
 
 <p>This is intended to be a quick guide to execute RMI as means for understanding the concept. This is for lab only and is not meant to be taken as a real life guide for RMI exection. For that refer Core JAVA - Volume 2 by Cay Horstmann.</p>
 
@@ -154,9 +199,9 @@
   </header>
 
 
-  <div class="entry-content"><h2 id="javascript---by-douglas-crockford">Javascript - By Douglas Crockford</h2>
+  <div class="entry-content"><h2>Javascript - By Douglas Crockford</h2>
 
-<p>This is one of the best videos on a programming language I have seen. And since its availability is spotty, I’ve uploaded it to my Google Drive and embedded it here. Copyright belongs to Yahoo!.</p>
+<p>This is one of the best videos on a programming language I have seen. And since its availability is spotty, I&#8217;ve uploaded it to my Google Drive and embedded it here. Copyright belongs to Yahoo!.</p>
 
 </div>
   
@@ -204,8 +249,9 @@
 
   <div class="entry-content"><script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?autoload=true&amp;skin=doxy&amp;lang=css" defer="defer"></script>
 
+
 <p>Hello. This is the first of a series of articles intended to accompany the  Operating systems course and helps to get the basic of System Programming.
-So without further ado, jump in…</p>
+So without further ado, jump in&#8230;</p>
 
 </div>
   
@@ -251,9 +297,10 @@ So without further ado, jump in…</p>
   </header>
 
 
-  <div class="entry-content"><p>~~Note: This is a draft of a much longer post. Work in progress.~~</p>
+  <div class="entry-content"><p><del>Note: This is a draft of a much longer post. Work in progress.</del></p>
 
-<p>Hello. This a quick introduction to the Sed utility found in unix-based operating systems. Sed is a contraction of __S__tream __ed__itor. It is a non-interactive text manipulator that manipulates text files, line by line. It is very powerful and can save hours of manual text editing with simple one line commands. This is not a complete guide to Sed. For that, you may want to look at the book <em>Sed and Awk</em> published by O’Reilly. Also, sed can handle scripts which can specify mutliple actions to be done. However this primer does not cover that topic and we will restrict ourselves to commands that can fit on one line.
+<p>Hello. This a quick introduction to the Sed utility found in unix-based operating systems. Sed is a contraction of <strong>S</strong>tream <strong>ed</strong>itor. It is a non-interactive text manipulator that manipulates text files, line by line. It is very powerful and can save hours of manual text editing with simple one line commands. This is not a complete guide to Sed. For that, you may want to look at the book <em>Sed and Awk</em> published by O&#8217;Reilly. Also, sed can handle scripts which can specify mutliple actions to be done. However this primer does not cover that topic and we will restrict ourselves to commands that can fit on one line.</p>
+
 </div>
   
   
@@ -298,9 +345,9 @@ So without further ado, jump in…</p>
   </header>
 
 
-  <div class="entry-content"><h2 id="an-excerpt-from-in-the-beginnning-was-the-commandline-by-neal-stephenson">An excerpt from <em>In the Beginnning was the commandline</em> by <strong>Neal Stephenson</strong></h2>
-<p>MGBs, TANKS, AND BATMOBILES
-===========================</p>
+  <div class="entry-content"><h2>An excerpt from <em>In the Beginnning was the commandline</em> by <strong>Neal Stephenson</strong></h2>
+
+<h1>MGBs, TANKS, AND BATMOBILES</h1>
 
 <p>Imagine a crossroads where four competing auto dealerships are situated. One of them (Microsoft) is much, much bigger than the others. It started out years ago selling three-speed bicycles (MS-DOS); these were not perfect, but they worked, and when they broke you could easily fix them.
 There was a competing bicycle dealership next door (Apple) that one day began selling motorized vehicles—expensive but attractively styled cars with their innards hermetically sealed, so that how they worked was something of a mystery.</p>
@@ -349,22 +396,15 @@ There was a competing bicycle dealership next door (Apple) that one day began se
   </header>
 
 
-  <div class="entry-content"><p>According to me, mastering the shell scripting required for our lab (or anywhere for that matter) involves ~~three~~ four things..</p>
+  <div class="entry-content"><p>According to me, mastering the shell scripting required for our lab (or anywhere for that matter) involves <del>three</del> four things..</p>
 
 <ol>
-  <li>
-    <p>Quoting</p>
-  </li>
-  <li>
-    <p>Command substitution and File name expansion</p>
-  </li>
-  <li>
-    <p>Regular expressions</p>
-  </li>
-  <li>
-    <p>Knowledge of commandline utilities</p>
-  </li>
+<li><p>Quoting</p></li>
+<li><p>Command substitution and File name expansion</p></li>
+<li><p>Regular expressions</p></li>
+<li><p>Knowledge of commandline utilities</p></li>
 </ol>
+
 
 </div>
   

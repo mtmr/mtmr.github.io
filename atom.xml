@@ -4,7 +4,7 @@
   <title><![CDATA[muthu raj]]></title>
   <link href="http://muthusblog.com/atom.xml" rel="self"/>
   <link href="http://muthusblog.com/"/>
-  <updated>2015-02-16T23:08:06+05:30</updated>
+  <updated>2015-03-18T17:55:51+05:30</updated>
   <id>http://muthusblog.com/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -14,179 +14,191 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Inter-Process Communication using Pipes]]></title>
+    <link href="http://muthusblog.com/blog/2015/03/13/inter-process-communication-using-pipes/"/>
+    <updated>2015-03-13T09:13:54+05:30</updated>
+    <id>http://muthusblog.com/blog/2015/03/13/inter-process-communication-using-pipes</id>
+    <content type="html"><![CDATA[<p>In the last post, we saw forking and executing another program in the child process after forking. Now let us look at basic interprocess communication using pipes.
+Pipes are a means to redirect input and output in such a way that the output of one process becomes the input of another process. We have already seen this in use of sed and grep tools where we&#8217;d pipe the <code>echo's</code> output to the tools and use it. This is the UNIX implementation of pipes for the shell. Let us now see piping in C programs as a means of Inter-process communication in Linux.</p>
+
+<h2>pipe(), close() and read(), write()</h2>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[RMI - Quick Writeup]]></title>
     <link href="http://muthusblog.com/blog/2015/02/16/rmi-quick-writeup/"/>
     <updated>2015-02-16T22:42:55+05:30</updated>
     <id>http://muthusblog.com/blog/2015/02/16/rmi-quick-writeup</id>
-    <content type="html"><![CDATA[<h2 id="rmi-execution-at-a-glance">RMI execution at a glance..</h2>
+    <content type="html"><![CDATA[<h2>RMI execution at a glance..</h2>
 
 <p>This is intended to be a quick guide to execute RMI as means for understanding the concept. This is for lab only and is not meant to be taken as a real life guide for RMI exection. For that refer Core JAVA - Volume 2 by Cay Horstmann.</p>
 
 <!--more-->
 
-<h2 id="client-side">Client side</h2>
+
+<h2>Client side</h2>
 
 <ul>
-  <li>Extend and implement the Remote interface in java.rmi.*.</li>
-  <li>Make sure your methods throw RemoteException and use either <code>Naming.lookup(rmi://localhost/you_class)</code> or <code>namingcontext.lookup(rmi://localhost/your_class)</code>. Here namingcontext is an object constructed using <code>Context namingcontext = new InitialContext();</code>.</li>
-  <li>After looking up, use casting to get the object of the type you need.</li>
-  <li>See the code below.</li>
+<li>Extend and implement the Remote interface in java.rmi.*.</li>
+<li>Make sure your methods throw RemoteException and use either <code>Naming.lookup(rmi://localhost/you_class)</code> or <code>namingcontext.lookup(rmi://localhost/your_class)</code>. Here namingcontext is an object constructed using <code>Context namingcontext = new InitialContext();</code>.</li>
+<li>After looking up, use casting to get the object of the type you need.</li>
+<li>See the code below.</li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Warehouse.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
-</span><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Warehouse</span> <span class="kd">extends</span> <span class="n">Remote</span>
-</span><span class="line"><span class="o">{</span>
-</span><span class="line">	<span class="kt">double</span> <span class="nf">getPrice</span><span class="o">(</span><span class="n">String</span> <span class="n">description</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">;</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<figure class='code'><figcaption><span>Warehouse.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Warehouse</span> <span class="kd">extends</span> <span class="n">Remote</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="kt">double</span> <span class="nf">getPrice</span><span class="o">(</span><span class="n">String</span> <span class="n">description</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <p>This one demonstrates the second point.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>WarehouseClient.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">javax.naming.*</span><span class="o">;</span>
-</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseClient</span>
-</span><span class="line"><span class="o">{</span>
-</span><span class="line">	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NamingException</span><span class="o">,</span> <span class="n">RemoteException</span>
-</span><span class="line">	<span class="o">{</span>
-</span><span class="line">		<span class="n">Context</span> <span class="n">namingcontext</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InitialContext</span><span class="o">();</span>
-</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;RMI registry bindings..&quot;</span><span class="o">);</span>
-</span><span class="line">		<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">&quot;rmi://localhost/centralwarehouse&quot;</span><span class="o">;</span>
-</span><span class="line">		<span class="n">Warehouse</span> <span class="n">centralwarehouse</span> <span class="o">=</span> <span class="o">(</span><span class="n">Warehouse</span><span class="o">)</span> <span class="n">namingcontext</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="n">url</span><span class="o">);</span>
-</span><span class="line">		<span class="n">String</span> <span class="n">descr</span> <span class="o">=</span> <span class="s">&quot;Blackwell Toaster&quot;</span><span class="o">;</span>
-</span><span class="line">		<span class="kt">double</span> <span class="n">price</span> <span class="o">=</span> <span class="n">centralwarehouse</span><span class="o">.</span><span class="na">getPrice</span><span class="o">(</span><span class="n">descr</span><span class="o">);</span>
-</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">descr</span> <span class="o">+</span> <span class="s">&quot; : &quot;</span> <span class="o">+</span> <span class="n">price</span><span class="o">);</span>
-</span><span class="line">
-</span><span class="line">	<span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span>WarehouseClient.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">javax.naming.*</span><span class="o">;</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseClient</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NamingException</span><span class="o">,</span> <span class="n">RemoteException</span>
+</span><span class='line'>  <span class="o">{</span>
+</span><span class='line'>      <span class="n">Context</span> <span class="n">namingcontext</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InitialContext</span><span class="o">();</span>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;RMI registry bindings..&quot;</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">&quot;rmi://localhost/centralwarehouse&quot;</span><span class="o">;</span>
+</span><span class='line'>      <span class="n">Warehouse</span> <span class="n">centralwarehouse</span> <span class="o">=</span> <span class="o">(</span><span class="n">Warehouse</span><span class="o">)</span> <span class="n">namingcontext</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="n">url</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">String</span> <span class="n">descr</span> <span class="o">=</span> <span class="s">&quot;Blackwell Toaster&quot;</span><span class="o">;</span>
+</span><span class='line'>      <span class="kt">double</span> <span class="n">price</span> <span class="o">=</span> <span class="n">centralwarehouse</span><span class="o">.</span><span class="na">getPrice</span><span class="o">(</span><span class="n">descr</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">descr</span> <span class="o">+</span> <span class="s">&quot; : &quot;</span> <span class="o">+</span> <span class="n">price</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<h2 id="server-side">Server Side…</h2>
+
+<h2>Server Side&#8230;</h2>
 
 <ul>
-  <li>Implement the interface you defined in client side.</li>
-  <li>Make sure you extend <code>UnicastRemoteObject</code> in <code>java.rmi.server.*</code>(Import it and extend it.)</li>
-  <li>Bind the class to a rmi registry using similar methods you used for lookup. Replace lookup by bind. The main method show throw <code>NamingException</code> and <code>RemoteException</code>.</li>
-  <li>Compile everything.</li>
+<li>Implement the interface you defined in client side.</li>
+<li>Make sure you extend <code>UnicastRemoteObject</code> in <code>java.rmi.server.*</code>(Import it and extend it.)</li>
+<li>Bind the class to a rmi registry using similar methods you used for lookup. Replace lookup by bind. The main method show throw <code>NamingException</code> and <code>RemoteException</code>.</li>
+<li>Compile everything.</li>
 </ul>
+
 
 <p>This demonstrates the first point.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>WarehouseImpl.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">java.rmi.server.*</span><span class="o">;</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
-</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseImpl</span> <span class="kd">extends</span> <span class="n">UnicastRemoteObject</span> <span class="kd">implements</span> <span class="n">Warehouse</span>
-</span><span class="line"><span class="o">{</span>
-</span><span class="line">	<span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">prices</span><span class="o">;</span>
-</span><span class="line">	<span class="kd">public</span> <span class="nf">WarehouseImpl</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">RemoteException</span>
-</span><span class="line">	<span class="o">{</span>
-</span><span class="line">		<span class="n">prices</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
-</span><span class="line">		<span class="n">prices</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;Blackwell Toaster&quot;</span><span class="o">,</span> <span class="mf">24.95</span><span class="o">);</span>
-</span><span class="line">		<span class="n">prices</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;ZapXpress Microwave Oven&quot;</span><span class="o">,</span> <span class="mf">49.95</span><span class="o">);</span>
-</span><span class="line">	<span class="o">}</span>
-</span><span class="line">	<span class="kd">public</span> <span class="kt">double</span> <span class="nf">getPrice</span><span class="o">(</span><span class="n">String</span> <span class="n">description</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span>
-</span><span class="line">	<span class="o">{</span>
-</span><span class="line">		<span class="n">Double</span> <span class="n">price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">description</span><span class="o">);</span>
-</span><span class="line">		<span class="k">return</span> <span class="n">price</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">price</span><span class="o">;</span>
-</span><span class="line">	<span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span>WarehouseImpl.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">java.rmi.server.*</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseImpl</span> <span class="kd">extends</span> <span class="n">UnicastRemoteObject</span> <span class="kd">implements</span> <span class="n">Warehouse</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">prices</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="nf">WarehouseImpl</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">RemoteException</span>
+</span><span class='line'>  <span class="o">{</span>
+</span><span class='line'>      <span class="n">prices</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+</span><span class='line'>      <span class="n">prices</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;Blackwell Toaster&quot;</span><span class="o">,</span> <span class="mf">24.95</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">prices</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;ZapXpress Microwave Oven&quot;</span><span class="o">,</span> <span class="mf">49.95</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getPrice</span><span class="o">(</span><span class="n">String</span> <span class="n">description</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span>
+</span><span class='line'>  <span class="o">{</span>
+</span><span class='line'>      <span class="n">Double</span> <span class="n">price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">description</span><span class="o">);</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">price</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">price</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>This demonstrates the Third point.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>WarehouseServer.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">javax.naming.*</span><span class="o">;</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseServer</span>
-</span><span class="line"><span class="o">{</span>
-</span><span class="line">	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">,</span> <span class="n">NamingException</span>
-</span><span class="line">	<span class="o">{</span>
-</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Constructing server Implementation...&quot;</span><span class="o">);</span>
-</span><span class="line">		<span class="n">WarehouseImpl</span> <span class="n">centralwarehouse</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">WarehouseImpl</span><span class="o">();</span>
-</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Binding implementation to registry..&quot;</span><span class="o">);</span>
-</span><span class="line">		<span class="n">Context</span> <span class="n">namingContext</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InitialContext</span><span class="o">();</span>
-</span><span class="line">		<span class="n">namingContext</span><span class="o">.</span><span class="na">bind</span><span class="o">(</span><span class="s">&quot;rmi:centralwarehouse&quot;</span><span class="o">,</span> <span class="n">centralwarehouse</span><span class="o">);</span>
-</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Waiting for Invocation from clients&quot;</span><span class="o">);</span>
-</span><span class="line">	<span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span>WarehouseServer.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">javax.naming.*</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseServer</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">,</span> <span class="n">NamingException</span>
+</span><span class='line'>  <span class="o">{</span>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Constructing server Implementation...&quot;</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">WarehouseImpl</span> <span class="n">centralwarehouse</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">WarehouseImpl</span><span class="o">();</span>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Binding implementation to registry..&quot;</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">Context</span> <span class="n">namingContext</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InitialContext</span><span class="o">();</span>
+</span><span class='line'>      <span class="n">namingContext</span><span class="o">.</span><span class="na">bind</span><span class="o">(</span><span class="s">&quot;rmi:centralwarehouse&quot;</span><span class="o">,</span> <span class="n">centralwarehouse</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Waiting for Invocation from clients&quot;</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>After you compile everything, (Make sure they are in same folder). Do these in order.</p>
 
 <ul>
-  <li>
-    <p>Open Three cmd windows or terminals.</p>
-  </li>
-  <li>
-    <p>Start rmiregistry by executing <code>rmiregistry</code></p>
-  </li>
-  <li>
-    <p>Start the server program by <code>java WarehouseServer</code></p>
-  </li>
-  <li>
-    <p>Start the client program by <code>java WarehouseClient</code></p>
-  </li>
+<li><p>Open Three cmd windows or terminals.</p></li>
+<li><p>Start rmiregistry by executing <code>rmiregistry</code></p></li>
+<li><p>Start the server program by <code>java WarehouseServer</code></p></li>
+<li><p>Start the client program by <code>java WarehouseClient</code></p></li>
 </ul>
 
-<p>That’s it. You <em>_DO NOT_</em> need <code>rmic</code>. It is deprecated since JAVA version 1.5. We have 1.6 in lab.
-Pat yourselves on the back. You successfully executed RMI program. And also, realworld RMI isn’t this simple. You have something called dynamic class loading that can really drive you up the wall if you aren’t careful. </p>
+
+<p>That&#8217;s it. You <em><em>DO NOT</em></em> need <code>rmic</code>. It is deprecated since JAVA version 1.5. We have 1.6 in lab.
+Pat yourselves on the back. You successfully executed RMI program. And also, realworld RMI isn&#8217;t this simple. You have something called dynamic class loading that can really drive you up the wall if you aren&#8217;t careful.</p>
 
 <p>The code examples are copied from Core Java - Volume 2 9th Edition by Cay Horstmann.</p>
-
 ]]></content>
   </entry>
   
@@ -195,35 +207,40 @@ Pat yourselves on the back. You successfully executed RMI program. And also, rea
     <link href="http://muthusblog.com/blog/2015/02/15/douglas-crockford-javascript/"/>
     <updated>2015-02-15T15:02:42+05:30</updated>
     <id>http://muthusblog.com/blog/2015/02/15/douglas-crockford-javascript</id>
-    <content type="html"><![CDATA[<h2 id="javascript---by-douglas-crockford">Javascript - By Douglas Crockford</h2>
+    <content type="html"><![CDATA[<h2>Javascript - By Douglas Crockford</h2>
 
-<p>This is one of the best videos on a programming language I have seen. And since its availability is spotty, I’ve uploaded it to my Google Drive and embedded it here. Copyright belongs to Yahoo!.</p>
+<p>This is one of the best videos on a programming language I have seen. And since its availability is spotty, I&#8217;ve uploaded it to my Google Drive and embedded it here. Copyright belongs to Yahoo!.</p>
 
 <!--more-->
 
-<h2 id="part---i">Part - I</h2>
 
-<div align="center">
+<h2>Part - I</h2>
+
+<div align = "center" markdown = "0">
 <iframe src="https://docs.google.com/file/d/0B-QbWCkLjW6qQjhyeUMwUkVLSDg/preview" width="640" height="480"></iframe>
 </div>
 
-<h2 id="part---ii">Part - II</h2>
 
-<div align="center">
+<h2>Part - II</h2>
+
+<div align = "center" markdown = "0">
 <iframe src="https://docs.google.com/file/d/0B-QbWCkLjW6qMWFkZ3NQdEhybkk/preview" width="640" height="480"></iframe>
 </div>
 
-<h2 id="part---iii">Part - III</h2>
 
-<div align="center">
+<h2>Part - III</h2>
+
+<div align = "center" markdown = "0">
 <iframe src="https://docs.google.com/file/d/0B-QbWCkLjW6qdjI2ektlYnJWcGs/preview" width="640" height="480"></iframe>
 </div>
 
-<h2 id="part---iv">Part - IV</h2>
 
-<div align="center">
+<h2>Part - IV</h2>
+
+<div align = "center" markdown = "0">
 <iframe src="https://docs.google.com/file/d/0B-QbWCkLjW6qTlVYWVRHV2dqSlU/preview" width="640" height="480"></iframe>
 </div>
+
 ]]></content>
   </entry>
   
@@ -234,119 +251,124 @@ Pat yourselves on the back. You successfully executed RMI program. And also, rea
     <id>http://muthusblog.com/blog/2015/02/07/understanding-fork-and-exec</id>
     <content type="html"><![CDATA[<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?autoload=true&amp;skin=doxy&amp;lang=css" defer="defer"></script>
 
+
 <p>Hello. This is the first of a series of articles intended to accompany the  Operating systems course and helps to get the basic of System Programming.
-So without further ado, jump in…</p>
+So without further ado, jump in&#8230;</p>
 
 <!-- more -->
 
-<h2 id="creating-a-process">Creating a process</h2>
+
+<h2>Creating a process</h2>
 
 <p>A process is <em>a program in the midst of execution</em>. Apart from the text section, it also has memory space, open resources, internal information and whole lot of scary details (which the OS will abstract for you).  So far so good. So how do you create a process? Since the process is a program in execution you can just create a process by running a program right? Yes and No. There is no universal createprocess() or spawn() method. You cannot create a process like that. So how does it happen then?</p>
 
-<p>In unix all process start off as copies of their parent process. i.e., They start of as clones of their parents. Then they assume their own ID on the decision of their parents ( whoever decided this must be Indian ). So how are the clones created then? Simple. By means of the clone() method. But mostly we won’t use that method directly. We will call clone indirectly using a function called fork(). (Which is software jargon for copying). fork() is defined in the header <code>unistd.h</code>. Here is the syntax:</p>
+<p>In unix all process start off as copies of their parent process. i.e., They start of as clones of their parents. Then they assume their own ID on the decision of their parents ( whoever decided this must be Indian ). So how are the clones created then? Simple. By means of the clone() method. But mostly we won&#8217;t use that method directly. We will call clone indirectly using a function called fork(). (Which is software jargon for copying). fork() is defined in the header <code>unistd.h</code>. Here is the syntax:</p>
 
-<pre><code>					fork(void)
+<pre><code>                    fork(void)
 </code></pre>
 
-<p>It returns the PID of the process if the fork is successful. And it takes no parameters. So let’s see a simple program that forks a process.</p>
+<p>It returns the PID of the process if the fork is successful. And it takes no parameters. So let&#8217;s see a simple program that forks a process.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-</pre></td><td class="code"><pre><code class="C++"><span class="line"><span class="cp">#include &lt;stdio.h&gt;</span>
-</span><span class="line"><span class="cp">#include &lt;unistd.h&gt;</span>
-</span><span class="line"><span class="cp">#include &lt;sys/types.h&gt;</span>
-</span><span class="line"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%ld  %ld&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">getpid</span><span class="p">(),</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">getppid</span><span class="p">());</span>
-</span><span class="line">    <span class="kt">pid_t</span> <span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">();</span>
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class="line">    <span class="p">{</span>
-</span><span class="line">    	<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello World %ld&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">getpid</span><span class="p">());</span>
-</span><span class="line">    	<span class="n">execl</span><span class="p">(</span><span class="s">&quot;/bin/ls&quot;</span><span class="p">,</span> <span class="s">&quot;-a&quot;</span><span class="p">,(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">    <span class="k">else</span>
-</span><span class="line">    	<span class="k">if</span><span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-</span><span class="line">    		<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed&quot;</span><span class="p">);</span>
-</span><span class="line">    <span class="k">else</span>
-</span><span class="line">    	<span class="n">printf</span><span class="p">(</span><span class="s">&quot;HEllo Small world %ld&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">getpid</span><span class="p">());</span>
-</span><span class="line">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="cp">#include &lt;stdio.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;unistd.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;sys/types.h&gt;</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%ld  %ld&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">getpid</span><span class="p">(),</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">getppid</span><span class="p">());</span>
+</span><span class='line'>    <span class="kt">pid_t</span> <span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello World %ld&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">getpid</span><span class="p">());</span>
+</span><span class='line'>      <span class="n">execl</span><span class="p">(</span><span class="s">&quot;/bin/ls&quot;</span><span class="p">,</span> <span class="s">&quot;-a&quot;</span><span class="p">,(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>          <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;HEllo Small world %ld&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">getpid</span><span class="p">());</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <p>What happens is, when fork() is executed, the cloning takes place. And until the cloning is finished, the parent is in blocked or waiting state. When it is finished, the processes resume execution at a point right after the fork call. Now remember how the <code>fork()</code> call returns a value (that I told you was PID). Well here is where it gets a little tricky.
-The <code>fork()</code> call returns twice. Once for the parent process and once for the child. And in the case of a parent process, it returns the actual PID. In case of child though, it returns 0. Which is not the PID. Because only the scheduler has the PID of 0. Even the <code>init</code> process which is the first process to be executed doesn’t get 0. It gets a 1 for PID. So, the fact to be taken into account here is that in case of child process the <code>fork()</code> doesn’t actually return the PID. Instead it returns 0 so that we can identify it is a child. Note that this is done because the actual PID will be some positive integer which cannot be predicted and hence cannot be used to identify the child.
+The <code>fork()</code> call returns twice. Once for the parent process and once for the child. And in the case of a parent process, it returns the actual PID. In case of child though, it returns 0. Which is not the PID. Because only the scheduler has the PID of 0. Even the <code>init</code> process which is the first process to be executed doesn&#8217;t get 0. It gets a 1 for PID. So, the fact to be taken into account here is that in case of child process the <code>fork()</code> doesn&#8217;t actually return the PID. Instead it returns 0 so that we can identify it is a child. Note that this is done because the actual PID will be some positive integer which cannot be predicted and hence cannot be used to identify the child.
 Everything is fine so far. Now, what exactly is the use of forking a method? For simple programs like the ones we demoed above, where a single program has both parent and child code, this may be fine. But for complex programs where we want to execute a separate program this approach may not be suitable. Which is where exec() comes into picture.</p>
 
-<h2 id="there-is-no-function-called-exec">There is no function called exec()</h2>
+<h2>There is no function called exec()</h2>
 
-<p>Yes. <code>exec()</code> is the name of a family of functions that execute another program. The one we will see here is <code>execl()</code>. Let’s see a program and then an explanation.</p>
+<p>Yes. <code>exec()</code> is the name of a family of functions that execute another program. The one we will see here is <code>execl()</code>. Let&#8217;s see a program and then an explanation.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-</pre></td><td class="code"><pre><code class="C++"><span class="line"><span class="cp">#include&lt;stdio.h&gt;</span>
-</span><span class="line"><span class="cp">#include&lt;unistd.h&gt;</span>
-</span><span class="line"><span class="cp">#include&lt;sys/types.h&gt;</span>
-</span><span class="line"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-</span><span class="line"><span class="p">{</span>
-</span><span class="line">  <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span> <span class="c1">//Holds the return value of fork()</span>
-</span><span class="line">  <span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">();</span>
-</span><span class="line">  <span class="k">if</span><span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">//fork is successful and we are in child process</span>
-</span><span class="line">  <span class="p">{</span>
-</span><span class="line">    <span class="n">execl</span><span class="p">(</span><span class="s">&quot;/bin/ls&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="o">*</span><span class="kt">char</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span> <span class="c1">//program name, commandline argument to the program, null pointer for terminating the list of parameters</span>
-</span><span class="line">  <span class="p">}</span>
-</span><span class="line">  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1">//fork has failed</span>
-</span><span class="line">  <span class="p">{</span>
-</span><span class="line">  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Forking failed :( )&quot;</span><span class="p">);</span> <span class="c1">//Print an error message to stdin and exit</span>
-</span><span class="line">  <span class="p">}</span>
-</span><span class="line"><span class="k">else</span> <span class="c1">//fork done and parent version runs</span>
-</span><span class="line">  <span class="p">{</span>
-</span><span class="line">  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;This is parent process and I was waiting till child was finished.&quot;</span><span class="p">);</span>
-</span><span class="line">  <span class="p">}</span>
-</span><span class="line"><span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="cp">#include&lt;stdio.h&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;unistd.h&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;sys/types.h&gt;</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span> <span class="c1">//Holds the return value of fork()</span>
+</span><span class='line'>  <span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">//fork is successful and we are in child process</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="n">execl</span><span class="p">(</span><span class="s">&quot;/bin/ls&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="o">*</span><span class="kt">char</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span> <span class="c1">//program name, commandline argument to the program, null pointer for terminating the list of parameters</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1">//fork has failed</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Forking failed :( )&quot;</span><span class="p">);</span> <span class="c1">//Print an error message to stdin and exit</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">else</span> <span class="c1">//fork done and parent version runs</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;This is parent process and I was waiting till child was finished.&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>The function call and the comment following it pretty much sums it up. When <code>exec()</code> is called, it <em>overwrites</em> the memory space of the process. i.e., none of that parent process’s memory space is now accessible. Other than that, everything is fine.
+
+<p>The function call and the comment following it pretty much sums it up. When <code>exec()</code> is called, it <em>overwrites</em> the memory space of the process. i.e., none of that parent process&#8217;s memory space is now accessible. Other than that, everything is fine.
 Remember though that you have to give exact path name of the program.</p>
 
-<h2 id="next-post">Next post</h2>
+<h2>Next post</h2>
 
 <p>Probably in 2 days. We will see InterProcess Communication using named pipes (FIFOs) and using semaphores. Watch this space. Suggestions and comments are welcome.</p>
 
-<p>Many Thanks to Faizaan Mohammed for pointing out typos and grammar mistakes. </p>
+<p>Many Thanks to Faizaan Mohammed for pointing out typos and grammar mistakes.</p>
 ]]></content>
   </entry>
   
@@ -355,108 +377,106 @@ Remember though that you have to give exact path name of the program.</p>
     <link href="http://muthusblog.com/blog/2015/01/20/sed-a-microprimer/"/>
     <updated>2015-01-20T18:07:38+05:30</updated>
     <id>http://muthusblog.com/blog/2015/01/20/sed-a-microprimer</id>
-    <content type="html"><![CDATA[<p>~~Note: This is a draft of a much longer post. Work in progress.~~</p>
+    <content type="html"><![CDATA[<p><del>Note: This is a draft of a much longer post. Work in progress.</del></p>
 
-<p>Hello. This a quick introduction to the Sed utility found in unix-based operating systems. Sed is a contraction of __S__tream __ed__itor. It is a non-interactive text manipulator that manipulates text files, line by line. It is very powerful and can save hours of manual text editing with simple one line commands. This is not a complete guide to Sed. For that, you may want to look at the book <em>Sed and Awk</em> published by O’Reilly. Also, sed can handle scripts which can specify mutliple actions to be done. However this primer does not cover that topic and we will restrict ourselves to commands that can fit on one line.
-<!-- more --></p>
+<p>Hello. This a quick introduction to the Sed utility found in unix-based operating systems. Sed is a contraction of <strong>S</strong>tream <strong>ed</strong>itor. It is a non-interactive text manipulator that manipulates text files, line by line. It is very powerful and can save hours of manual text editing with simple one line commands. This is not a complete guide to Sed. For that, you may want to look at the book <em>Sed and Awk</em> published by O&#8217;Reilly. Also, sed can handle scripts which can specify mutliple actions to be done. However this primer does not cover that topic and we will restrict ourselves to commands that can fit on one line.</p>
 
-<p>The General syntax of a sed command is </p>
+<!-- more -->
 
-<p>-&gt; ` sed [-n] [-e] [address1[,address2]][!] command [arguments] ` &lt;-</p>
+
+<p>The General syntax of a sed command is</p>
+
+<p style="text-align:center;"> <code>sed [-n] [-e] [address1[,address2]][!] command [arguments]</code></p>
 
 <p>All the options within square brackets are optional. Lets see what the options mean now.</p>
 
 <ul>
-  <li>
-    <p><code>-n</code> - Suppress normal output </p>
-  </li>
-  <li>
-    <p><code>-e</code> - Tells the sed that following argument is a command. This is useful when multiple commands are specified in the same line.</p>
-  </li>
-  <li>
-    <p><code>[address1[,address2]]</code> - The address range in the input text on which the follwing commands will be executed. Note that address can be specified as a range or only specify the beginning line (sed assumes that last line is the end address) or omitted entirely. Address can be specified as either line numbers or as search patterns which will result in the address being the line which contains the search pattern.</p>
-  </li>
-  <li>
-    <p><code>!</code> - This tells sed to process lines <strong>other</strong> than the ones specified in the address range.</p>
-  </li>
+<li><p><code>-n</code> - Suppress normal output</p></li>
+<li><p><code>-e</code> - Tells the sed that following argument is a command. This is useful when multiple commands are specified in the same line.</p></li>
+<li><p><code>[address1[,address2]]</code> - The address range in the input text on which the follwing commands will be executed. Note that address can be specified as a range or only specify the beginning line (sed assumes that last line is the end address) or omitted entirely. Address can be specified as either line numbers or as search patterns which will result in the address being the line which contains the search pattern.</p></li>
+<li><p><code>!</code> - This tells sed to process lines <strong>other</strong> than the ones specified in the address range.</p></li>
 </ul>
+
 
 <p>An example will clear things up..</p>
 
 <p>(You can execute these commands from each line in the terminal)</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Sed Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nb">echo</span> <span class="s2">&quot;John Connor&quot;</span> <span class="p">|</span> sed p
-</span><span class="line"><span class="nb">echo</span> <span class="s2">&quot;John Connor&quot;</span> <span class="p">|</span> sed -n p
-</span><span class="line"><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n 1,4 p
-</span><span class="line"><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n /John/,/of/p
-</span><span class="line"><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;/John/,/of/!p&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span>Sed Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> <span class="s2">&quot;John Connor&quot;</span> <span class="p">|</span> sed p
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;John Connor&quot;</span> <span class="p">|</span> sed -n p
+</span><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n 1,4 p
+</span><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n /John/,/of/p
+</span><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;/John/,/of/!p&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p><strong>Output</strong>
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="bash"><span class="line">1. John Connor
-</span><span class="line">
-</span><span class="line">   John Connor
-</span><span class="line">
-</span><span class="line">2. John Connor
-</span><span class="line">
-</span><span class="line">3. John
-</span><span class="line">
-</span><span class="line">   Connor
-</span><span class="line">
-</span><span class="line">   is
-</span><span class="line">
-</span><span class="line">   the
-</span><span class="line">
-</span><span class="line">4. John
-</span><span class="line">
-</span><span class="line">   Connor
-</span><span class="line">
-</span><span class="line">   is
-</span><span class="line">
-</span><span class="line">   the
-</span><span class="line">
-</span><span class="line">   leader
-</span><span class="line">
-</span><span class="line">   of
-</span><span class="line">
-</span><span class="line">5. resistance
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
-Most commonly used commands
-—————————</p>
 
-<p><code>p</code> - Prints input lines when used alone. Prints the input pattern when used along with <code>s</code> command. </p>
+<p><strong>Output</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>1. John Connor
+</span><span class='line'>
+</span><span class='line'>   John Connor
+</span><span class='line'>
+</span><span class='line'>2. John Connor
+</span><span class='line'>
+</span><span class='line'>3. John
+</span><span class='line'>
+</span><span class='line'>   Connor
+</span><span class='line'>
+</span><span class='line'>   is
+</span><span class='line'>
+</span><span class='line'>   the
+</span><span class='line'>
+</span><span class='line'>4. John
+</span><span class='line'>
+</span><span class='line'>   Connor
+</span><span class='line'>
+</span><span class='line'>   is
+</span><span class='line'>
+</span><span class='line'>   the
+</span><span class='line'>
+</span><span class='line'>   leader
+</span><span class='line'>
+</span><span class='line'>   of
+</span><span class='line'>
+</span><span class='line'>5. resistance
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Most commonly used commands</h2>
+
+<p><code>p</code> - Prints input lines when used alone. Prints the input pattern when used along with <code>s</code> command.</p>
 
 <p><code>s</code> - Substitutes the search pattern with a replacement pattern</p>
 
@@ -464,87 +484,92 @@ Most commonly used commands
 
 <p><code>y</code> - Replaces the search pattern character by character using the replacement pattern</p>
 
-<h1 id="command-syntax-and-usage-examples">Command Syntax and Usage Examples</h1>
+<h1>Command Syntax and Usage Examples</h1>
 
-<h2 id="substitute">Substitute</h2>
+<h2>Substitute </h2>
 
-<p>The syntax and usage of <code>p</code> command has been demonstrated already. Let’s see <code>s</code> now.</p>
+<p>The syntax and usage of <code>p</code> command has been demonstrated already. Let&#8217;s see <code>s</code> now.</p>
 
-<p>Syntax for <code>s</code> command is as follows…</p>
+<p>Syntax for <code>s</code> command is as follows&#8230;</p>
 
-<p>-&gt; <code>sed [-n] [address1[,address2]][!]s/search pattern/replacement pattern/[p][g]</code> &lt;-</p>
+<p style="text-align:center;"> <code>sed [-n] [address1[,address2]][!]s/search pattern/replacement pattern/[p][g]</code></p>
 
 <p>While it may seem really complex, it is very easy. Here is an example. Outputs are below each command as comments.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nb">echo </span>muthu <span class="p">|</span> sed -n <span class="s1">&#39;s/muthu/muthuraj/p&#39;</span>
-</span><span class="line"><span class="c">#muthuraj</span>
-</span><span class="line"><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;/John/,/of/s/John/John J./&#39;</span>
-</span><span class="line"><span class="c">#John J.</span>
-</span><span class="line"><span class="nb">echo</span> <span class="s2">&quot;John John John John&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;s/John/Paul/&#39;</span>
-</span><span class="line"><span class="c">#Paul John John John</span>
-</span><span class="line"><span class="nb">echo</span> <span class="s2">&quot;John John John John&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;s/John/Paul/g&#39;</span>
-</span><span class="line"><span class="c">#Paul Paul Paul Paul</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Don’t worry if you don’t understand these… We will see a primer on regular expressions soon…(I know it should’ve beeen first. Sorry!!) Watch out for the session announcement..</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo </span>muthu <span class="p">|</span> sed -n <span class="s1">&#39;s/muthu/muthuraj/p&#39;</span>
+</span><span class='line'><span class="c">#muthuraj</span>
+</span><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;/John/,/of/s/John/John J./&#39;</span>
+</span><span class='line'><span class="c">#John J.</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;John John John John&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;s/John/Paul/&#39;</span>
+</span><span class='line'><span class="c">#Paul John John John</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;John John John John&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;s/John/Paul/g&#39;</span>
+</span><span class='line'><span class="c">#Paul Paul Paul Paul</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Substituting using regular expressions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nb">echo</span> <span class="s2">&quot;This is a sentence&quot;</span> <span class="p">|</span> sed <span class="s1">&#39;s/\(^[A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/p&#39;</span> <span class="c"># swap first two words</span>
-</span><span class="line"><span class="c">#is This a sentence</span>
-</span><span class="line"><span class="nb">echo</span> <span class="s2">&quot;This is a sentence&quot;</span> <span class="p">|</span> sed <span class="s1">&#39;s/\([A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/gp&#39;</span> <span class="c"># swap all word pairs</span>
-</span><span class="line"><span class="c">#is This sentence a</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Don&#8217;t worry if you don&#8217;t understand these&#8230; We will see a primer on regular expressions soon&#8230;(I know it should&#8217;ve beeen first. Sorry!!) Watch out for the session announcement..</p>
+
+<figure class='code'><figcaption><span>Substituting using regular expressions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> <span class="s2">&quot;This is a sentence&quot;</span> <span class="p">|</span> sed <span class="s1">&#39;s/\(^[A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/p&#39;</span> <span class="c"># swap first two words</span>
+</span><span class='line'><span class="c">#is This a sentence</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;This is a sentence&quot;</span> <span class="p">|</span> sed <span class="s1">&#39;s/\([A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/gp&#39;</span> <span class="c"># swap all word pairs</span>
+</span><span class='line'><span class="c">#is This sentence a</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>You can combine address ranges in above commands and have the words swapped over a range of lines or lines that have a certain pattern.</p>
 
-<h2 id="change">Change</h2>
+<h2>Change</h2>
 
-<p>Syntax for change <code>c</code> command is as follows…
- ` sed [address1[,address2]]c\
-	replacement text`</p>
+<p>Syntax for change <code>c</code> command is as follows&#8230;
+ <code>sed [address1[,address2]]c\
+    replacement text</code></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Change in sed</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed  <span class="s1">&#39;/John/,/of/c\</span>
-</span><span class="line"><span class="s1">Changed&#39;</span>
-</span><span class="line"><span class="c">#Changed</span>
-</span><span class="line"><span class="c">#of</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span>Change in sed</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed  <span class="s1">&#39;/John/,/of/c\</span>
+</span><span class='line'><span class="s1">Changed&#39;</span>
+</span><span class='line'><span class="c">#Changed</span>
+</span><span class='line'><span class="c">#of</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Note that All of the lines in the given range are changed to the gicen text. You can have multiple lines of replacement text. Also after the <code>\</code> you should press <code>Enter</code> before entering the replacement text.</p>
 
-<h2 id="y-command"><code>y</code> Command</h2>
+<h2><code>y</code> Command</h2>
 
-<p>This is somewhat akin to the <code>tr</code> command in unix….</p>
+<p>This is somewhat akin to the <code>tr</code> command in unix&#8230;.</p>
 
-<p>Syntax for <code>y</code> command is as follows…</p>
+<p>Syntax for <code>y</code> command is as follows&#8230;</p>
 
-<p>-&gt; <code>sed [address1[,address2]]y/search/replacement/p</code> &lt;-</p>
+<p style="text-align:center;"> <code>sed [address1[,address2]]y/search/replacement/p</code></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nb">echo</span> -e <span class="s2">&quot;java&quot;</span> <span class="p">|</span> sed y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/
-</span><span class="line"><span class="c">#JAVA</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;java&quot;</span> <span class="p">|</span> sed y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/
+</span><span class='line'><span class="c">#JAVA</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Above command changes from lowercase to uppercase.
 Characters in search pattern are replaced by corresponding characters in replacement pattern.</p>
 
-<p>We will see more later… Comment if you have feedback/doubts… :)</p>
+<p>We will see more later&#8230; Comment if you have feedback/doubts&#8230; :)</p>
 
-<p>Many thanks to Loshmitha for proof-reading….</p>
+<p>Many thanks to Loshmitha for proof-reading&#8230;.</p>
 ]]></content>
   </entry>
   
@@ -553,14 +578,16 @@ Characters in search pattern are replaced by corresponding characters in replace
     <link href="http://muthusblog.com/blog/2015/01/19/the-story-of-operating-systems/"/>
     <updated>2015-01-19T12:54:57+05:30</updated>
     <id>http://muthusblog.com/blog/2015/01/19/the-story-of-operating-systems</id>
-    <content type="html"><![CDATA[<h2 id="an-excerpt-from-in-the-beginnning-was-the-commandline-by-neal-stephenson">An excerpt from <em>In the Beginnning was the commandline</em> by <strong>Neal Stephenson</strong></h2>
-<p>MGBs, TANKS, AND BATMOBILES
-===========================</p>
+    <content type="html"><![CDATA[<h2>An excerpt from <em>In the Beginnning was the commandline</em> by <strong>Neal Stephenson</strong></h2>
+
+<h1>MGBs, TANKS, AND BATMOBILES</h1>
 
 <p>Imagine a crossroads where four competing auto dealerships are situated. One of them (Microsoft) is much, much bigger than the others. It started out years ago selling three-speed bicycles (MS-DOS); these were not perfect, but they worked, and when they broke you could easily fix them.
 There was a competing bicycle dealership next door (Apple) that one day began selling motorized vehicles—expensive but attractively styled cars with their innards hermetically sealed, so that how they worked was something of a mystery.</p>
 
 <!-- more -->
+
+
 <p>The big dealership responded by rushing a moped upgrade kit (the original Windows) onto the market. This was a Rube Goldberg contraption that, when bolted onto a three-speed bicycle, enabled it to keep up, just barely, with Apple-cars. The users had to wear goggles and were always picking bugs out of their teeth while Apple owners sped along in hermetically sealed comfort, sneering out the windows. But the Micro-mopeds were cheap, and easy to fix compared with the Apple-cars, and their market share waxed.</p>
 
 <p>Eventually the big dealership came out with a full-fledged car: a colossal station wagon (Windows 95). It had all the aesthetic appeal of a Soviet worker housing block, it leaked oil and blew gaskets, and it was an enormous success. A little later, they also came out with a hulking off-road vehicle intended for industrial users (Windows NT), which was no more beautiful than the station wagon and only a little more reliable.</p>
@@ -601,85 +628,95 @@ The Batmobile outlet sells a few vehicles to the occasional car nut who wants a 
     <link href="http://muthusblog.com/blog/2015/01/11/understanding-the-commands-used-in-lab/"/>
     <updated>2015-01-11T15:45:42+05:30</updated>
     <id>http://muthusblog.com/blog/2015/01/11/understanding-the-commands-used-in-lab</id>
-    <content type="html"><![CDATA[<p>According to me, mastering the shell scripting required for our lab (or anywhere for that matter) involves ~~three~~ four things..</p>
+    <content type="html"><![CDATA[<p>According to me, mastering the shell scripting required for our lab (or anywhere for that matter) involves <del>three</del> four things..</p>
 
 <ol>
-  <li>
-    <p>Quoting</p>
-  </li>
-  <li>
-    <p>Command substitution and File name expansion</p>
-  </li>
-  <li>
-    <p>Regular expressions</p>
-  </li>
-  <li>
-    <p>Knowledge of commandline utilities</p>
-  </li>
+<li><p>Quoting</p></li>
+<li><p>Command substitution and File name expansion</p></li>
+<li><p>Regular expressions</p></li>
+<li><p>Knowledge of commandline utilities</p></li>
 </ol>
 
-<!-- more -->
-<p>Quoting
-————
-We already covered quoting in class. In a nutshell, When you want all special meaning for all characters turned off(i.e., when you want to print $1500 using instead of having the shell interpreting it as an attempt to access the value of a variable 1500) you use single quotes. When you 
-want certain special meanings (<code>`,</code><code> \\ </code><code>,</code><code> $ </code><code>) to be preserved, you use double quotes.
-&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;figcaption&gt;&lt;span&gt;Quoting&lt;/span&gt;&lt;/figcaption&gt;&lt;div class="highlight"&gt;&lt;table&gt;&lt;tr&gt;&lt;td class="gutter"&gt;&lt;pre class="line-numbers"&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
-&lt;span class='line-number'&gt;2&lt;/span&gt;
-&lt;span class='line-number'&gt;3&lt;/span&gt;
-&lt;span class='line-number'&gt;4&lt;/span&gt;
-&lt;span class='line-number'&gt;5&lt;/span&gt;
-&lt;span class='line-number'&gt;6&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class='bash'&gt;&lt;span class='line'&gt;&lt;span class="nv"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;muthu&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;span class='line'&gt;&lt;span class="c"&gt;#note the single quotes and spacing. Double quotes work too.&lt;/span&gt;
-&lt;/span&gt;&lt;span class='line'&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;$name&amp;quot;&lt;/span&gt;
-&lt;/span&gt;&lt;span class='line'&gt;&lt;span class="c"&gt;#Prints out muthu. Retains special meaning of $&lt;/span&gt;
-&lt;/span&gt;&lt;span class='line'&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;$name&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;span class='line'&gt;&lt;span class="c"&gt;#Prints out $name.&lt;/span&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-Command Substitution and filename globbing
--------------------------------------------------------------------
-Command substitution refers to substituting the standard output of a command to a variable. File name globbing is nothing but expanding filenames using special characters like</code><code> * </code>&#8220;.
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span>Command Substitution and File name globbing</span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="bash"><span class="line"><span class="nv">name</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nv">$muthu</span><span class="sb">`</span>
-</span><span class="line"><span class="c">#Backquotes(`) are used to assign the output of a command to a variable a.k.a Command substitution</span>
-</span><span class="line"><span class="nv">name</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;muthu&quot;</span><span class="k">)</span>
-</span><span class="line"><span class="c">#Another method for command substitution.</span>
-</span><span class="line">ls *.zip
-</span><span class="line"><span class="c">#Lists all files with the zip extension. (Recall Wildcards)</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
 
-<h2 id="knowledge-of-commandline-utilities">Knowledge of commandline utilities</h2>
+<!-- more -->
+
+
+<h2>Quoting</h2>
+
+<p>We already covered quoting in class. In a nutshell, When you want all special meaning for all characters turned off(i.e., when you want to print $1500 using instead of having the shell interpreting it as an attempt to access the value of a variable 1500) you use single quotes. When you
+want certain special meanings (<code>`</code>,<code>\\</code>, <code>$</code>) to be preserved, you use double quotes.</p>
+
+<figure class='code'><figcaption><span>Quoting</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">name</span><span class="o">=</span><span class="s1">&#39;muthu&#39;</span>
+</span><span class='line'><span class="c">#note the single quotes and spacing. Double quotes work too.</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;$name&quot;</span>
+</span><span class='line'><span class="c">#Prints out muthu. Retains special meaning of $</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s1">&#39;$name&#39;</span>
+</span><span class='line'><span class="c">#Prints out $name.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Command Substitution and filename globbing</h2>
+
+<p>Command substitution refers to substituting the standard output of a command to a variable. File name globbing is nothing but expanding filenames using special characters like <code>*</code>.</p>
+
+<figure class='code'><figcaption><span>Command Substitution and File name globbing</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">name</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nv">$muthu</span><span class="sb">`</span>
+</span><span class='line'><span class="c">#Backquotes(`) are used to assign the output of a command to a variable a.k.a Command substitution</span>
+</span><span class='line'><span class="nv">name</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;muthu&quot;</span><span class="k">)</span>
+</span><span class='line'><span class="c">#Another method for command substitution.</span>
+</span><span class='line'>ls *.zip
+</span><span class='line'><span class="c">#Lists all files with the zip extension. (Recall Wildcards)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Knowledge of commandline utilities</h2>
 
 <p>It is unfair to expect everyone to know all the available command line utilites especially when they are not using it on a daily basis. However <code>apropos</code> can be of much help.</p>
 
-<h2 id="regular-expressions">Regular Expressions</h2>
-<p>Regular expressions is not a topic I can explain in a single post. Note that the topic in itself is not so complicated. <strong><em>I</em></strong> do not know it enough to explain so easily. However, I will concentrate on explaining the commands and programs we used in last lab session. (First five will be covered in this post)
-Sed is a text stream manipulator. It can read through a text file line by line and perform modifications and print them to standard output. And it uses regular expressions to search through the text. The general syntax for the most widely used substitution command of sed is this
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="bash"><span class="line">sed -n <span class="s1">&#39;s/something/somethingelse/[p][g]&#39;</span> filename
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt; 
-The sed is the command name while <code>-n</code> option asks the utility to suppress normal output and print only what is specified. (The stuff that follows) <code>s</code> means we want the tool to <em>substitute</em> the <code>something</code> into <code>somethingelse</code> and the last two optional flags(marked by the presence of square brackets around them) tell that we want the result to be printed and the we want the expression to be applied globally (By default, only the first something is replaced by somethingelse).
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span>Sed basics</span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="bash"><span class="line"><span class="nb">echo</span> <span class="s2">&quot;muthu&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;s/muthu/muthuraj/p&#39;</span>
-</span><span class="line"><span class="c">#the above command replaces muthu by muthuraj</span>
-</span><span class="line"><span class="nb">echo</span> <span class="s2">&quot;muthu&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;s/\([a-z][a-z]*\)/&amp;raj/p&#39;</span>
-</span><span class="line"><span class="c">#the above command does the same but uses regular expressions.</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
-Sed command to delete first character of each line in a file
-——————————
-(We’ll assume that there is a file called sample.txt in your current ditrectory)</p>
+<h2>Regular Expressions</h2>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">sed <span class="s1">&#39;s/^.//&#39;</span> sample.txt
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Regular expressions is not a topic I can explain in a single post. Note that the topic in itself is not so complicated. <strong><em>I</em></strong> do not know it enough to explain so easily. However, I will concentrate on explaining the commands and programs we used in last lab session. (First five will be covered in this post)
+Sed is a text stream manipulator. It can read through a text file line by line and perform modifications and print them to standard output. And it uses regular expressions to search through the text. The general syntax for the most widely used substitution command of sed is this</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sed -n <span class="s1">&#39;s/something/somethingelse/[p][g]&#39;</span> filename
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+The sed is the command name while <code>-n</code> option asks the utility to suppress normal output and print only what is specified. (The stuff that follows) <code>s</code> means we want the tool to <em>substitute</em> the <code>something</code> into <code>somethingelse</code> and the last two optional flags(marked by the presence of square brackets around them) tell that we want the result to be printed and the we want the expression to be applied globally (By default, only the first something is replaced by somethingelse).</p>
+
+<figure class='code'><figcaption><span>Sed basics</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> <span class="s2">&quot;muthu&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;s/muthu/muthuraj/p&#39;</span>
+</span><span class='line'><span class="c">#the above command replaces muthu by muthuraj</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;muthu&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;s/\([a-z][a-z]*\)/&amp;raj/p&#39;</span>
+</span><span class='line'><span class="c">#the above command does the same but uses regular expressions.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Sed command to delete first character of each line in a file</h2>
+
+<p>(We&#8217;ll assume that there is a file called sample.txt in your current ditrectory)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sed <span class="s1">&#39;s/^.//&#39;</span> sample.txt
+</span></code></pre></td></tr></table></div></figure>
+
+
 <p>Note: <code>/</code> is a seperator between the action, search for pattern and the replacement pattern.</p>
 
 <p>The above command is split as follows:</p>
@@ -688,60 +725,69 @@ Sed command to delete first character of each line in a file
 
 <p><code>^.</code> - <code>^</code> Denotes the beginning of a line. It is what we call an anchor character. <code>.</code> asks the tool to match exactly one character no matter what kind of character</p>
 
-<p><code>//</code> - Nothing between the slashes denotes we replace a single charcter with nothing, thereby “deleting” that character</p>
+<p><code>//</code> - Nothing between the slashes denotes we replace a single charcter with nothing, thereby &#8220;deleting&#8221; that character</p>
 
-<h2 id="sed-command-to-delete-the-last-character-of-each-line-in-a-file">Sed command to delete the last character of each line in a file</h2>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">sed <span class="s1">&#39;s/.$//&#39;</span> sample.txt
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<h2>Sed command to delete the last character of each line in a file</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sed <span class="s1">&#39;s/.$//&#39;</span> sample.txt
+</span></code></pre></td></tr></table></div></figure>
+
+
 <p><code>s</code>- substitute</p>
 
 <p><code>.$</code> - <code>$</code> Denotes the end of a line. <code>.</code> matches exactly one character no matter what kind of character</p>
 
-<p><code>//</code>- Nothing between the slashes denotes we replace a single charcter with nothing, thereby “deleting” that character</p>
+<p><code>//</code>- Nothing between the slashes denotes we replace a single charcter with nothing, thereby &#8220;deleting&#8221; that character</p>
 
-<h2 id="sed-command-to-swap-two-words">Sed Command to swap two words</h2>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Sed to swap two words</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">sed <span class="s1">&#39;s/\([a-z][a-z]*\) /\([a-z][a-z]*\) /\2 \1/&#39;</span> sample.txt
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Here, it gets a little more complicated. </p>
+<h2>Sed Command to swap two words </h2>
 
-<p>The <code>\(</code>after the first <code>/</code>denotes that we want to use a open bracket to group the pattern. We use the <code>\</code> to turn on a special meaning for the <code>( </code>. (It is complicated. We’ll come back to that another day…..) Same goes for <code>\)</code>.</p>
+<figure class='code'><figcaption><span>Sed to swap two words</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sed <span class="s1">&#39;s/\([a-z][a-z]*\) /\([a-z][a-z]*\) /\2 \1/&#39;</span> sample.txt
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Now that we have eliminated the escaped Brackets, We’ll come to the patterns, between the slashes.</p>
+
+<p>Here, it gets a little more complicated.</p>
+
+<p>The <code>\(</code>after the first <code>/</code>denotes that we want to use a open bracket to group the pattern. We use the <code>\</code> to turn on a special meaning for the <code>( </code>. (It is complicated. We&#8217;ll come back to that another day&#8230;..) Same goes for <code>\)</code>.</p>
+
+<p>Now that we have eliminated the escaped Brackets, We&#8217;ll come to the patterns, between the slashes.</p>
 
 <p><code>[a-z]</code> denotes that we have to match any chracter in the range a-z. Repeating that a second time with a <code>*</code> suffixed and results in selecting a single letter word at the minimum. <code>*</code> denotes the tool will select the pattern preceding it zero or more times. If we include the pattern [a-z] and suffix it with a <code>*</code> it will match nothing too(Read the previous line about <code>*</code> again) zero or more times. The second set selects another word.</p>
 
-<p><code>/\2 \1/ </code> swaps the first and second words ans separates them by a space. </p>
+<p><code>/\2 \1/ </code> swaps the first and second words ans separates them by a space.</p>
 
-<p>Note: Above version does not work for words with uppercase letters or with symbols like ASK or won’t.</p>
+<p>Note: Above version does not work for words with uppercase letters or with symbols like ASK or won&#8217;t.</p>
 
-<h2 id="pipe-you-etcpasswd-to-awk-and-print-it">Pipe you /etc/passwd to awk and print it</h2>
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>AWK</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">cat /etc/passwd <span class="p">|</span> awk <span class="s2">&quot;{print $7}&quot;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<h2>Pipe you /etc/passwd to awk and print it</h2>
+
+<figure class='code'><figcaption><span>AWK</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat /etc/passwd <span class="p">|</span> awk <span class="s2">&quot;{print $7}&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p><code>cat</code> prints everything in the file to standard output. You pipe it to awk using <code>|</code> and ask awk to print the seventh column by saying <code>"{ print $7}"</code>.</p>
 
-<h2 id="develop-an-interactive-grep-script-that-asks-for-a-word-and-a-file-name-and-then-tells-how-many-lines-contain-that-word">Develop an interactive grep script that asks for a word and a file name and then tells how many lines contain that word</h2>
+<h2>Develop an interactive grep script that asks for a word and a file name and then tells how many lines contain that word</h2>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c">#! /bin/bash</span>
-</span><span class="line"><span class="nb">echo</span> <span class="s2">&quot;Enter the word:&quot;</span>
-</span><span class="line"><span class="nb">read </span>word
-</span><span class="line"><span class="nb">echo</span> <span class="s2">&quot;Enter the file name:&quot;</span>
-</span><span class="line"><span class="nb">read </span>file
-</span><span class="line">grep -c <span class="nv">$word</span> <span class="nv">$file</span>
-</span><span class="line"><span class="nb">exit </span>0
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#! /bin/bash</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;Enter the word:&quot;</span>
+</span><span class='line'><span class="nb">read </span>word
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;Enter the file name:&quot;</span>
+</span><span class='line'><span class="nb">read </span>file
+</span><span class='line'>grep -c <span class="nv">$word</span> <span class="nv">$file</span>
+</span><span class='line'><span class="nb">exit </span>0
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Nothing to explain here. </p>
+
+<p>Nothing to explain here.</p>
 
 <p>I will continue the next post as soon as I get a chance. Comment below if you have any doubts. Also, any and all feedback is welcome.</p>
 

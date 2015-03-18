@@ -4,7 +4,7 @@
   <title><![CDATA[Category: os | muthu raj]]></title>
   <link href="http://muthusblog.com/blog/categories/os/atom.xml" rel="self"/>
   <link href="http://muthusblog.com/"/>
-  <updated>2015-02-16T23:08:06+05:30</updated>
+  <updated>2015-03-18T17:55:51+05:30</updated>
   <id>http://muthusblog.com/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -14,62 +14,74 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Inter-Process Communication using Pipes]]></title>
+    <link href="http://muthusblog.com/blog/2015/03/13/inter-process-communication-using-pipes/"/>
+    <updated>2015-03-13T09:13:54+05:30</updated>
+    <id>http://muthusblog.com/blog/2015/03/13/inter-process-communication-using-pipes</id>
+    <content type="html"><![CDATA[<p>In the last post, we saw forking and executing another program in the child process after forking. Now let us look at basic interprocess communication using pipes.
+Pipes are a means to redirect input and output in such a way that the output of one process becomes the input of another process. We have already seen this in use of sed and grep tools where we&#8217;d pipe the <code>echo's</code> output to the tools and use it. This is the UNIX implementation of pipes for the shell. Let us now see piping in C programs as a means of Inter-process communication in Linux.</p>
+
+<h2>pipe(), close() and read(), write()</h2>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Understanding fork() and exec()]]></title>
     <link href="http://muthusblog.com/blog/2015/02/07/understanding-fork-and-exec/"/>
     <updated>2015-02-07T20:46:59+05:30</updated>
     <id>http://muthusblog.com/blog/2015/02/07/understanding-fork-and-exec</id>
     <content type="html"><![CDATA[<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?autoload=true&amp;skin=doxy&amp;lang=css" defer="defer"></script>
 
+
 <p>Hello. This is the first of a series of articles intended to accompany the  Operating systems course and helps to get the basic of System Programming.
-So without further ado, jump in…</p>
+So without further ado, jump in&#8230;</p>
 
 <!-- more -->
 
-<h2 id="creating-a-process">Creating a process</h2>
+
+<h2>Creating a process</h2>
 
 <p>A process is <em>a program in the midst of execution</em>. Apart from the text section, it also has memory space, open resources, internal information and whole lot of scary details (which the OS will abstract for you).  So far so good. So how do you create a process? Since the process is a program in execution you can just create a process by running a program right? Yes and No. There is no universal createprocess() or spawn() method. You cannot create a process like that. So how does it happen then?</p>
 
-<p>In unix all process start off as copies of their parent process. i.e., They start of as clones of their parents. Then they assume their own ID on the decision of their parents ( whoever decided this must be Indian ). So how are the clones created then? Simple. By means of the clone() method. But mostly we won’t use that method directly. We will call clone indirectly using a function called fork(). (Which is software jargon for copying). fork() is defined in the header <code>unistd.h</code>. Here is the syntax:</p>
+<p>In unix all process start off as copies of their parent process. i.e., They start of as clones of their parents. Then they assume their own ID on the decision of their parents ( whoever decided this must be Indian ). So how are the clones created then? Simple. By means of the clone() method. But mostly we won&#8217;t use that method directly. We will call clone indirectly using a function called fork(). (Which is software jargon for copying). fork() is defined in the header <code>unistd.h</code>. Here is the syntax:</p>
 
-<pre><code>					fork(void)
+<pre><code>                    fork(void)
 </code></pre>
 
-<p>It returns the PID of the process if the fork is successful. And it takes no parameters. So let’s see a simple program that forks a process.</p>
+<p>It returns the PID of the process if the fork is successful. And it takes no parameters. So let&#8217;s see a simple program that forks a process.</p>
 
-<p>&#8220;` C++</p>
-
-<h1 id="include-stdioh">include <stdio.h></stdio.h></h1>
-<p>#include <unistd.h>
+<pre><code class="C++">
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
 #include &lt;sys/types.h&gt;
 int main(void) {
-    printf(&#8220;%ld  %ld&#8221;, (long)getpid(), (long)getppid());
+    printf("%ld  %ld", (long)getpid(), (long)getppid());
     pid_t pid = fork();
     if(pid == 0)
     {
-    	printf(&#8220;Hello World %ld&#8221;, (long)getpid());
-    	execl(&#8220;/bin/ls&#8221;, &#8220;-a&#8221;,(char *)0);
+        printf("Hello World %ld", (long)getpid());
+        execl("/bin/ls", "-a",(char *)0);
     }
     else
-    	if(pid == -1)
-    		printf(&#8220;Failed&#8221;);
+        if(pid == -1)
+            printf("Failed");
     else
-    	printf(&#8220;HEllo Small world %ld&#8221;, (long)getpid());
+        printf("HEllo Small world %ld", (long)getpid());
     return 0;
-}</unistd.h></p>
+}
+</code></pre>
 
-<p>&#8220;`
-What happens is, when fork() is executed, the cloning takes place. And until the cloning is finished, the parent is in blocked or waiting state. When it is finished, the processes resume execution at a point right after the fork call. Now remember how the <code>fork()</code> call returns a value (that I told you was PID). Well here is where it gets a little tricky.
-The <code>fork()</code> call returns twice. Once for the parent process and once for the child. And in the case of a parent process, it returns the actual PID. In case of child though, it returns 0. Which is not the PID. Because only the scheduler has the PID of 0. Even the <code>init</code> process which is the first process to be executed doesn’t get 0. It gets a 1 for PID. So, the fact to be taken into account here is that in case of child process the <code>fork()</code> doesn’t actually return the PID. Instead it returns 0 so that we can identify it is a child. Note that this is done because the actual PID will be some positive integer which cannot be predicted and hence cannot be used to identify the child.
+<p>What happens is, when fork() is executed, the cloning takes place. And until the cloning is finished, the parent is in blocked or waiting state. When it is finished, the processes resume execution at a point right after the fork call. Now remember how the <code>fork()</code> call returns a value (that I told you was PID). Well here is where it gets a little tricky.
+The <code>fork()</code> call returns twice. Once for the parent process and once for the child. And in the case of a parent process, it returns the actual PID. In case of child though, it returns 0. Which is not the PID. Because only the scheduler has the PID of 0. Even the <code>init</code> process which is the first process to be executed doesn&#8217;t get 0. It gets a 1 for PID. So, the fact to be taken into account here is that in case of child process the <code>fork()</code> doesn&#8217;t actually return the PID. Instead it returns 0 so that we can identify it is a child. Note that this is done because the actual PID will be some positive integer which cannot be predicted and hence cannot be used to identify the child.
 Everything is fine so far. Now, what exactly is the use of forking a method? For simple programs like the ones we demoed above, where a single program has both parent and child code, this may be fine. But for complex programs where we want to execute a separate program this approach may not be suitable. Which is where exec() comes into picture.</p>
 
-<h2 id="there-is-no-function-called-exec">There is no function called exec()</h2>
+<h2>There is no function called exec()</h2>
 
-<p>Yes. <code>exec()</code> is the name of a family of functions that execute another program. The one we will see here is <code>execl()</code>. Let’s see a program and then an explanation.</p>
+<p>Yes. <code>exec()</code> is the name of a family of functions that execute another program. The one we will see here is <code>execl()</code>. Let&#8217;s see a program and then an explanation.</p>
 
-<p>&#8220;` C++</p>
-
-<h1 id="includestdioh">include<stdio.h></stdio.h></h1>
-<p>#include<unistd.h>
+<pre><code class="C++">
+#include&lt;stdio.h&gt;
+#include&lt;unistd.h&gt;
 #include&lt;sys/types.h&gt;
 int main(void)
 {
@@ -77,29 +89,28 @@ int main(void)
   pid = fork();
   if(pid == 0) //fork is successful and we are in child process
   {
-    execl(&#8220;/bin/ls&#8221;, &#8220;&#8221;, *char(0)); //program name, commandline argument to the program, null pointer for terminating the list of parameters
+    execl("/bin/ls", "", *char(0)); //program name, commandline argument to the program, null pointer for terminating the list of parameters
   }
   else if (pid == -1) //fork has failed
   {
-  printf(&#8220;Forking failed :( )&#8221;); //Print an error message to stdin and exit
+  printf("Forking failed :( )"); //Print an error message to stdin and exit
   }
 else //fork done and parent version runs
   {
-  printf(&#8220;This is parent process and I was waiting till child was finished.&#8221;);
+  printf("This is parent process and I was waiting till child was finished.");
   }
 return 0;
-}</unistd.h></p>
+}
+</code></pre>
 
-<p>&#8220;`</p>
-
-<p>The function call and the comment following it pretty much sums it up. When <code>exec()</code> is called, it <em>overwrites</em> the memory space of the process. i.e., none of that parent process’s memory space is now accessible. Other than that, everything is fine.
+<p>The function call and the comment following it pretty much sums it up. When <code>exec()</code> is called, it <em>overwrites</em> the memory space of the process. i.e., none of that parent process&#8217;s memory space is now accessible. Other than that, everything is fine.
 Remember though that you have to give exact path name of the program.</p>
 
-<h2 id="next-post">Next post</h2>
+<h2>Next post</h2>
 
 <p>Probably in 2 days. We will see InterProcess Communication using named pipes (FIFOs) and using semaphores. Watch this space. Suggestions and comments are welcome.</p>
 
-<p>Many Thanks to Faizaan Mohammed for pointing out typos and grammar mistakes. </p>
+<p>Many Thanks to Faizaan Mohammed for pointing out typos and grammar mistakes.</p>
 ]]></content>
   </entry>
   

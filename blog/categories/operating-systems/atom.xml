@@ -4,7 +4,7 @@
   <title><![CDATA[Category: operating systems | muthu raj]]></title>
   <link href="http://muthusblog.com/blog/categories/operating-systems/atom.xml" rel="self"/>
   <link href="http://muthusblog.com/"/>
-  <updated>2015-02-16T23:08:06+05:30</updated>
+  <updated>2015-03-18T17:55:51+05:30</updated>
   <id>http://muthusblog.com/</id>
   <author>
     <name><![CDATA[Muthu Raj]]></name>
@@ -18,14 +18,16 @@
     <link href="http://muthusblog.com/blog/2015/01/19/the-story-of-operating-systems/"/>
     <updated>2015-01-19T12:54:57+05:30</updated>
     <id>http://muthusblog.com/blog/2015/01/19/the-story-of-operating-systems</id>
-    <content type="html"><![CDATA[<h2 id="an-excerpt-from-in-the-beginnning-was-the-commandline-by-neal-stephenson">An excerpt from <em>In the Beginnning was the commandline</em> by <strong>Neal Stephenson</strong></h2>
-<p>MGBs, TANKS, AND BATMOBILES
-===========================</p>
+    <content type="html"><![CDATA[<h2>An excerpt from <em>In the Beginnning was the commandline</em> by <strong>Neal Stephenson</strong></h2>
+
+<h1>MGBs, TANKS, AND BATMOBILES</h1>
 
 <p>Imagine a crossroads where four competing auto dealerships are situated. One of them (Microsoft) is much, much bigger than the others. It started out years ago selling three-speed bicycles (MS-DOS); these were not perfect, but they worked, and when they broke you could easily fix them.
 There was a competing bicycle dealership next door (Apple) that one day began selling motorized vehicles—expensive but attractively styled cars with their innards hermetically sealed, so that how they worked was something of a mystery.</p>
 
 <!-- more -->
+
+
 <p>The big dealership responded by rushing a moped upgrade kit (the original Windows) onto the market. This was a Rube Goldberg contraption that, when bolted onto a three-speed bicycle, enabled it to keep up, just barely, with Apple-cars. The users had to wear goggles and were always picking bugs out of their teeth while Apple owners sped along in hermetically sealed comfort, sneering out the windows. But the Micro-mopeds were cheap, and easy to fix compared with the Apple-cars, and their market share waxed.</p>
 
 <p>Eventually the big dealership came out with a full-fledged car: a colossal station wagon (Windows 95). It had all the aesthetic appeal of a Soviet worker housing block, it leaked oil and blew gaskets, and it was an enormous success. A little later, they also came out with a hulking off-road vehicle intended for industrial users (Windows NT), which was no more beautiful than the station wagon and only a little more reliable.</p>

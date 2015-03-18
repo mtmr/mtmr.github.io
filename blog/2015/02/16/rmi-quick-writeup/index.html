@@ -73,6 +73,7 @@
   <li><a href="/about">About Me</a></li>
   <li><a href="/linux">Linux</a></li>
   <li><a href="/archives">Archives</a></li>
+  <li><a href="/cv">C.V.</a></li>
 </ul>
 
 </nav>
@@ -103,175 +104,175 @@
   </header>
 
 
-<div class="entry-content"><h2 id="rmi-execution-at-a-glance">RMI execution at a glance..</h2>
+<div class="entry-content"><h2>RMI execution at a glance..</h2>
 
 <p>This is intended to be a quick guide to execute RMI as means for understanding the concept. This is for lab only and is not meant to be taken as a real life guide for RMI exection. For that refer Core JAVA - Volume 2 by Cay Horstmann.</p>
 
 <!--more-->
 
-<h2 id="client-side">Client side</h2>
+
+<h2>Client side</h2>
 
 <ul>
-  <li>Extend and implement the Remote interface in java.rmi.*.</li>
-  <li>Make sure your methods throw RemoteException and use either <code>Naming.lookup(rmi://localhost/you_class)</code> or <code>namingcontext.lookup(rmi://localhost/your_class)</code>. Here namingcontext is an object constructed using <code>Context namingcontext = new InitialContext();</code>.</li>
-  <li>After looking up, use casting to get the object of the type you need.</li>
-  <li>See the code below.</li>
+<li>Extend and implement the Remote interface in java.rmi.*.</li>
+<li>Make sure your methods throw RemoteException and use either <code>Naming.lookup(rmi://localhost/you_class)</code> or <code>namingcontext.lookup(rmi://localhost/your_class)</code>. Here namingcontext is an object constructed using <code>Context namingcontext = new InitialContext();</code>.</li>
+<li>After looking up, use casting to get the object of the type you need.</li>
+<li>See the code below.</li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Warehouse.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
-</span><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Warehouse</span> <span class="kd">extends</span> <span class="n">Remote</span>
-</span><span class="line"><span class="o">{</span>
-</span><span class="line">	<span class="kt">double</span> <span class="nf">getPrice</span><span class="o">(</span><span class="n">String</span> <span class="n">description</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">;</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<figure class='code'><figcaption><span>Warehouse.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Warehouse</span> <span class="kd">extends</span> <span class="n">Remote</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="kt">double</span> <span class="nf">getPrice</span><span class="o">(</span><span class="n">String</span> <span class="n">description</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <p>This one demonstrates the second point.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>WarehouseClient.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">javax.naming.*</span><span class="o">;</span>
-</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseClient</span>
-</span><span class="line"><span class="o">{</span>
-</span><span class="line">	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NamingException</span><span class="o">,</span> <span class="n">RemoteException</span>
-</span><span class="line">	<span class="o">{</span>
-</span><span class="line">		<span class="n">Context</span> <span class="n">namingcontext</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InitialContext</span><span class="o">();</span>
-</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;RMI registry bindings..&quot;</span><span class="o">);</span>
-</span><span class="line">		<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">&quot;rmi://localhost/centralwarehouse&quot;</span><span class="o">;</span>
-</span><span class="line">		<span class="n">Warehouse</span> <span class="n">centralwarehouse</span> <span class="o">=</span> <span class="o">(</span><span class="n">Warehouse</span><span class="o">)</span> <span class="n">namingcontext</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="n">url</span><span class="o">);</span>
-</span><span class="line">		<span class="n">String</span> <span class="n">descr</span> <span class="o">=</span> <span class="s">&quot;Blackwell Toaster&quot;</span><span class="o">;</span>
-</span><span class="line">		<span class="kt">double</span> <span class="n">price</span> <span class="o">=</span> <span class="n">centralwarehouse</span><span class="o">.</span><span class="na">getPrice</span><span class="o">(</span><span class="n">descr</span><span class="o">);</span>
-</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">descr</span> <span class="o">+</span> <span class="s">&quot; : &quot;</span> <span class="o">+</span> <span class="n">price</span><span class="o">);</span>
-</span><span class="line">
-</span><span class="line">	<span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span>WarehouseClient.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">javax.naming.*</span><span class="o">;</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseClient</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">NamingException</span><span class="o">,</span> <span class="n">RemoteException</span>
+</span><span class='line'>  <span class="o">{</span>
+</span><span class='line'>      <span class="n">Context</span> <span class="n">namingcontext</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InitialContext</span><span class="o">();</span>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;RMI registry bindings..&quot;</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">&quot;rmi://localhost/centralwarehouse&quot;</span><span class="o">;</span>
+</span><span class='line'>      <span class="n">Warehouse</span> <span class="n">centralwarehouse</span> <span class="o">=</span> <span class="o">(</span><span class="n">Warehouse</span><span class="o">)</span> <span class="n">namingcontext</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="n">url</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">String</span> <span class="n">descr</span> <span class="o">=</span> <span class="s">&quot;Blackwell Toaster&quot;</span><span class="o">;</span>
+</span><span class='line'>      <span class="kt">double</span> <span class="n">price</span> <span class="o">=</span> <span class="n">centralwarehouse</span><span class="o">.</span><span class="na">getPrice</span><span class="o">(</span><span class="n">descr</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">descr</span> <span class="o">+</span> <span class="s">&quot; : &quot;</span> <span class="o">+</span> <span class="n">price</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<h2 id="server-side">Server Side…</h2>
+
+<h2>Server Side&#8230;</h2>
 
 <ul>
-  <li>Implement the interface you defined in client side.</li>
-  <li>Make sure you extend <code>UnicastRemoteObject</code> in <code>java.rmi.server.*</code>(Import it and extend it.)</li>
-  <li>Bind the class to a rmi registry using similar methods you used for lookup. Replace lookup by bind. The main method show throw <code>NamingException</code> and <code>RemoteException</code>.</li>
-  <li>Compile everything.</li>
+<li>Implement the interface you defined in client side.</li>
+<li>Make sure you extend <code>UnicastRemoteObject</code> in <code>java.rmi.server.*</code>(Import it and extend it.)</li>
+<li>Bind the class to a rmi registry using similar methods you used for lookup. Replace lookup by bind. The main method show throw <code>NamingException</code> and <code>RemoteException</code>.</li>
+<li>Compile everything.</li>
 </ul>
+
 
 <p>This demonstrates the first point.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>WarehouseImpl.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">java.rmi.server.*</span><span class="o">;</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
-</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseImpl</span> <span class="kd">extends</span> <span class="n">UnicastRemoteObject</span> <span class="kd">implements</span> <span class="n">Warehouse</span>
-</span><span class="line"><span class="o">{</span>
-</span><span class="line">	<span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">prices</span><span class="o">;</span>
-</span><span class="line">	<span class="kd">public</span> <span class="nf">WarehouseImpl</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">RemoteException</span>
-</span><span class="line">	<span class="o">{</span>
-</span><span class="line">		<span class="n">prices</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
-</span><span class="line">		<span class="n">prices</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;Blackwell Toaster&quot;</span><span class="o">,</span> <span class="mf">24.95</span><span class="o">);</span>
-</span><span class="line">		<span class="n">prices</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;ZapXpress Microwave Oven&quot;</span><span class="o">,</span> <span class="mf">49.95</span><span class="o">);</span>
-</span><span class="line">	<span class="o">}</span>
-</span><span class="line">	<span class="kd">public</span> <span class="kt">double</span> <span class="nf">getPrice</span><span class="o">(</span><span class="n">String</span> <span class="n">description</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span>
-</span><span class="line">	<span class="o">{</span>
-</span><span class="line">		<span class="n">Double</span> <span class="n">price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">description</span><span class="o">);</span>
-</span><span class="line">		<span class="k">return</span> <span class="n">price</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">price</span><span class="o">;</span>
-</span><span class="line">	<span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span>WarehouseImpl.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">java.rmi.server.*</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseImpl</span> <span class="kd">extends</span> <span class="n">UnicastRemoteObject</span> <span class="kd">implements</span> <span class="n">Warehouse</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Double</span><span class="o">&gt;</span> <span class="n">prices</span><span class="o">;</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="nf">WarehouseImpl</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">RemoteException</span>
+</span><span class='line'>  <span class="o">{</span>
+</span><span class='line'>      <span class="n">prices</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+</span><span class='line'>      <span class="n">prices</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;Blackwell Toaster&quot;</span><span class="o">,</span> <span class="mf">24.95</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">prices</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;ZapXpress Microwave Oven&quot;</span><span class="o">,</span> <span class="mf">49.95</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getPrice</span><span class="o">(</span><span class="n">String</span> <span class="n">description</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span>
+</span><span class='line'>  <span class="o">{</span>
+</span><span class='line'>      <span class="n">Double</span> <span class="n">price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">description</span><span class="o">);</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">price</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">price</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>This demonstrates the Third point.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>WarehouseServer.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">javax.naming.*</span><span class="o">;</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseServer</span>
-</span><span class="line"><span class="o">{</span>
-</span><span class="line">	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">,</span> <span class="n">NamingException</span>
-</span><span class="line">	<span class="o">{</span>
-</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Constructing server Implementation...&quot;</span><span class="o">);</span>
-</span><span class="line">		<span class="n">WarehouseImpl</span> <span class="n">centralwarehouse</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">WarehouseImpl</span><span class="o">();</span>
-</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Binding implementation to registry..&quot;</span><span class="o">);</span>
-</span><span class="line">		<span class="n">Context</span> <span class="n">namingContext</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InitialContext</span><span class="o">();</span>
-</span><span class="line">		<span class="n">namingContext</span><span class="o">.</span><span class="na">bind</span><span class="o">(</span><span class="s">&quot;rmi:centralwarehouse&quot;</span><span class="o">,</span> <span class="n">centralwarehouse</span><span class="o">);</span>
-</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Waiting for Invocation from clients&quot;</span><span class="o">);</span>
-</span><span class="line">	<span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<figure class='code'><figcaption><span>WarehouseServer.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">import</span> <span class="nn">java.rmi.*</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">javax.naming.*</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WarehouseServer</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">,</span> <span class="n">NamingException</span>
+</span><span class='line'>  <span class="o">{</span>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Constructing server Implementation...&quot;</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">WarehouseImpl</span> <span class="n">centralwarehouse</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">WarehouseImpl</span><span class="o">();</span>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Binding implementation to registry..&quot;</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">Context</span> <span class="n">namingContext</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InitialContext</span><span class="o">();</span>
+</span><span class='line'>      <span class="n">namingContext</span><span class="o">.</span><span class="na">bind</span><span class="o">(</span><span class="s">&quot;rmi:centralwarehouse&quot;</span><span class="o">,</span> <span class="n">centralwarehouse</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Waiting for Invocation from clients&quot;</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>After you compile everything, (Make sure they are in same folder). Do these in order.</p>
 
 <ul>
-  <li>
-    <p>Open Three cmd windows or terminals.</p>
-  </li>
-  <li>
-    <p>Start rmiregistry by executing <code>rmiregistry</code></p>
-  </li>
-  <li>
-    <p>Start the server program by <code>java WarehouseServer</code></p>
-  </li>
-  <li>
-    <p>Start the client program by <code>java WarehouseClient</code></p>
-  </li>
+<li><p>Open Three cmd windows or terminals.</p></li>
+<li><p>Start rmiregistry by executing <code>rmiregistry</code></p></li>
+<li><p>Start the server program by <code>java WarehouseServer</code></p></li>
+<li><p>Start the client program by <code>java WarehouseClient</code></p></li>
 </ul>
 
-<p>That’s it. You <em>_DO NOT_</em> need <code>rmic</code>. It is deprecated since JAVA version 1.5. We have 1.6 in lab.
-Pat yourselves on the back. You successfully executed RMI program. And also, realworld RMI isn’t this simple. You have something called dynamic class loading that can really drive you up the wall if you aren’t careful. </p>
+
+<p>That&#8217;s it. You <em><em>DO NOT</em></em> need <code>rmic</code>. It is deprecated since JAVA version 1.5. We have 1.6 in lab.
+Pat yourselves on the back. You successfully executed RMI program. And also, realworld RMI isn&#8217;t this simple. You have something called dynamic class loading that can really drive you up the wall if you aren&#8217;t careful.</p>
 
 <p>The code examples are copied from Core Java - Volume 2 9th Edition by Cay Horstmann.</p>
-
 </div>
 
 
@@ -317,6 +318,8 @@ Pat yourselves on the back. You successfully executed RMI program. And also, rea
       
         <a class="basic-alignment left" href="/blog/2015/02/15/douglas-crockford-javascript/" title="Previous Post: Douglas Crockford - Javascript">&laquo; Douglas Crockford - Javascript</a>
       
+      
+        <a class="basic-alignment right" href="/blog/2015/03/13/inter-process-communication-using-pipes/" title="Next Post: Inter-Process Communication using Pipes">Inter-Process Communication using Pipes &raquo;</a>
       
     </p>
   </footer>
