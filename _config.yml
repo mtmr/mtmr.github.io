@@ -34,15 +34,15 @@ destination: public
 plugins: plugins
 code_dir: downloads/code
 category_dir: blog/categories
-#rdiscount:
-# extensions:
-#   - autolink
-#   - footnotes
-#   - smart
+rdiscount:
+ extensions:
+   - autolink
+   - footnotes
+   - smart
 highlighter: pygments-style-github # default python pygments have been replaced by pygments.rb
-imarkdown: redcarpet2
-redcarpet:
-        extensions: ["hard_wrap", "no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data", "strikethrough", "superscript"]
+markdown: rdiscount
+#redcarpet:
+#       extensions: ["hard_wrap", "no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data", "strikethrough", "superscript"]
 paginate: 10          # Posts per page on the blog index
 paginate_path: "posts/:num"  # Directory base for pagination URLs eg. /posts/2/
 recent_posts: 5       # Posts in the sidebar Recent Posts section

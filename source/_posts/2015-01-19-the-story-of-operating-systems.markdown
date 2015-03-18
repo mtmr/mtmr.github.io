@@ -8,7 +8,7 @@ categories: ["linux", "operating systems"]
 An excerpt from *In the Beginnning was the commandline* by __Neal Stephenson__
 ------------------------------------------------------------------------------
 MGBs, TANKS, AND BATMOBILES
-===========================
+=========================================
 
 Imagine a crossroads where four competing auto dealerships are situated. One of them (Microsoft) is much, much bigger than the others. It started out years ago selling three-speed bicycles (MS-DOS); these were not perfect, but they worked, and when they broke you could easily fix them.
 There was a competing bicycle dealership next door (Apple) that one day began selling motorized vehicles—expensive but attractively styled cars with their innards hermetically sealed, so that how they worked was something of a mystery.
