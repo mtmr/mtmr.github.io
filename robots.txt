@@ -1,4 +1,0 @@
-User-agent: *
-Disallow:
-
-Sitemap: http://muthusblog.com/sitemap.xml
