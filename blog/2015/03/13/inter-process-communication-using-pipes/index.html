@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Inter-Process Communication using Pipes - muthu raj</title>
+  <meta name="author" content="Muthu Raj">
+
+  
+  <meta name="description" content="In the last post, we saw forking and executing another program in the child process after forking. Now let us look at basic interprocess &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://muthusblog.com/blog/2015/03/13/inter-process-communication-using-pipes/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="muthu raj" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-57650939-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body >
+  <div id="container">
+    <header role="banner"><hgroup>
+  <h1><a href="/">muthu raj</a></h1>
+  
+    <h2>A 19 year old computer Nerd</h2>
+
+<br>
+    <h3>Carefully curated musings about programming, shell scripting and Linux</h3>
+</hgroup>
+
+</header>
+    <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:muthusblog.com" />
+    <input class="search" type="text" name="sitesearch" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/about">About Me</a></li>
+  <li><a href="/linux">Linux</a></li>
+  <li><a href="/archives">Archives</a></li>
+  <li><a href="/cv">C.V.</a></li>
+</ul>
+
+</nav>
+    <div id="main">
+      <div id="content">
+        <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title"><a href="">Inter-Process Communication Using Pipes</a></h1>
+    
+    
+      <div class="post-meta">
+        <p class="meta">
+          <span class="timestamp">- 
+
+
+
+
+<time class='entry-date' datetime='2015-03-13T09:13:54+05:30'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:13 am</span></time> -</span>
+          
+          | <a href="#disqus_thread">Comments</a>
+          
+        </p>
+      </div>
+    
+  </header>
+
+
+<div class="entry-content"><p>In the last post, we saw forking and executing another program in the child process after forking. Now let us look at basic interprocess communication using pipes.
+Pipes are a means to redirect input and output in such a way that the output of one process becomes the input of another process. We have already seen this in use of sed and grep tools where we&#8217;d pipe the <code>echo's</code> output to the tools and use it. This is the UNIX implementation of pipes for the shell. Let us now see piping in C programs as a means of Inter-process communication in Linux.</p>
+
+<h2>pipe(), close() and read(), write()</h2>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Muthu Raj</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-03-13T09:13:54+05:30'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:13 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/os/'>os</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://muthusblog.com/blog/2015/03/13/inter-process-communication-using-pipes/" data-via="" data-counturl="http://muthusblog.com/blog/2015/03/13/inter-process-communication-using-pipes/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/02/16/rmi-quick-writeup/" title="Previous Post: RMI - Quick Writeup">&laquo; RMI - Quick Writeup</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+</div>
+
+      </div><!-- /div#content -->
+    </div><!-- /div#main -->
+  </div><!-- /div.container -->
+  <footer>
+<div id="footer-first" class="footer-widget">
+    <h3>About Me</h3>
+    <section class="about-me">
+      
+        <img class="icon-image" src="https://secure.gravatar.com/avatar/63682f9f22d49c62c53a968b253eedab.jp://secure.gravatar.com/avatar/63682f9f22d49c62c53a968b253eedab.png?s=240" alt="icon_image">
+      
+      <div>
+        <ul>
+          
+            <li>GitHub: <a href="https://github.com/mtmr">@mtmr</a></li>
+          
+          
+            <li>Blog: <a href="http://muthusblog.com">http://muthusblog.com</a></li>
+        </ul>
+        <p>
+          Will code for Chinese food, comfortable chair and Internet
+        </p>
+      </div>
+    </section>
+  </div><!-- /div#footer-second -->
+<div id="credit" role="contentinfo">
+  <p>
+    <a href="mailto:muthu.raj@outlook.com">Muthu Raj</a> -
+    <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> | Themed with Customized <a href="https://github.com/haya14busa/mjolvim-octotheme">Mjolvim</a></span> 
+  </p>
+</div>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a>
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'muthuraj';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://muthusblog.com/blog/2015/03/13/inter-process-communication-using-pipes/';
+        var disqus_url = 'http://muthusblog.com/blog/2015/03/13/inter-process-communication-using-pipes/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'https://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>

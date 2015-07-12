@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Sed - A Microprimer - muthu raj</title>
+  <meta name="author" content="Muthu Raj">
+
+  
+  <meta name="description" content="Note: This is a draft of a much longer post. Work in progress. Hello. This a quick introduction to the Sed utility found in unix-based operating &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://muthusblog.com/blog/2015/01/20/sed-a-microprimer/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="muthu raj" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-57650939-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body >
+  <div id="container">
+    <header role="banner"><hgroup>
+  <h1><a href="/">muthu raj</a></h1>
+  
+    <h2>A 19 year old computer Nerd</h2>
+
+<br>
+    <h3>Carefully curated musings about programming, shell scripting and Linux</h3>
+</hgroup>
+
+</header>
+    <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:muthusblog.com" />
+    <input class="search" type="text" name="sitesearch" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/about">About Me</a></li>
+  <li><a href="/linux">Linux</a></li>
+  <li><a href="/archives">Archives</a></li>
+  <li><a href="/cv">C.V.</a></li>
+</ul>
+
+</nav>
+    <div id="main">
+      <div id="content">
+        <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title"><a href="">Sed - a Microprimer</a></h1>
+    
+    
+      <div class="post-meta">
+        <p class="meta">
+          <span class="timestamp">- 
+
+
+
+
+<time class='entry-date' datetime='2015-01-20T18:07:38+05:30'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:07 pm</span></time> -</span>
+          
+          | <a href="#disqus_thread">Comments</a>
+          
+        </p>
+      </div>
+    
+  </header>
+
+
+<div class="entry-content"><p><del>Note: This is a draft of a much longer post. Work in progress.</del></p>
+
+<p>Hello. This a quick introduction to the Sed utility found in unix-based operating systems. Sed is a contraction of <strong>S</strong>tream <strong>ed</strong>itor. It is a non-interactive text manipulator that manipulates text files, line by line. It is very powerful and can save hours of manual text editing with simple one line commands. This is not a complete guide to Sed. For that, you may want to look at the book <em>Sed and Awk</em> published by O&#8217;Reilly. Also, sed can handle scripts which can specify mutliple actions to be done. However this primer does not cover that topic and we will restrict ourselves to commands that can fit on one line.</p>
+
+<!-- more -->
+
+
+<p>The General syntax of a sed command is</p>
+
+<p style="text-align:center;"> <code>sed [-n] [-e] [address1[,address2]][!] command [arguments]</code></p>
+
+<p>All the options within square brackets are optional. Lets see what the options mean now.</p>
+
+<ul>
+<li><p><code>-n</code> - Suppress normal output</p></li>
+<li><p><code>-e</code> - Tells the sed that following argument is a command. This is useful when multiple commands are specified in the same line.</p></li>
+<li><p><code>[address1[,address2]]</code> - The address range in the input text on which the follwing commands will be executed. Note that address can be specified as a range or only specify the beginning line (sed assumes that last line is the end address) or omitted entirely. Address can be specified as either line numbers or as search patterns which will result in the address being the line which contains the search pattern.</p></li>
+<li><p><code>!</code> - This tells sed to process lines <strong>other</strong> than the ones specified in the address range.</p></li>
+</ul>
+
+
+<p>An example will clear things up..</p>
+
+<p>(You can execute these commands from each line in the terminal)</p>
+
+<figure class='code'><figcaption><span>Sed Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> <span class="s2">&quot;John Connor&quot;</span> <span class="p">|</span> sed p
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;John Connor&quot;</span> <span class="p">|</span> sed -n p
+</span><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n 1,4 p
+</span><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n /John/,/of/p
+</span><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;/John/,/of/!p&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Output</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>1. John Connor
+</span><span class='line'>
+</span><span class='line'>   John Connor
+</span><span class='line'>
+</span><span class='line'>2. John Connor
+</span><span class='line'>
+</span><span class='line'>3. John
+</span><span class='line'>
+</span><span class='line'>   Connor
+</span><span class='line'>
+</span><span class='line'>   is
+</span><span class='line'>
+</span><span class='line'>   the
+</span><span class='line'>
+</span><span class='line'>4. John
+</span><span class='line'>
+</span><span class='line'>   Connor
+</span><span class='line'>
+</span><span class='line'>   is
+</span><span class='line'>
+</span><span class='line'>   the
+</span><span class='line'>
+</span><span class='line'>   leader
+</span><span class='line'>
+</span><span class='line'>   of
+</span><span class='line'>
+</span><span class='line'>5. resistance
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Most commonly used commands</h2>
+
+<p><code>p</code> - Prints input lines when used alone. Prints the input pattern when used along with <code>s</code> command.</p>
+
+<p><code>s</code> - Substitutes the search pattern with a replacement pattern</p>
+
+<p><code>c</code> - Changes the text in the given address-range to a replacement text.</p>
+
+<p><code>y</code> - Replaces the search pattern character by character using the replacement pattern</p>
+
+<h1>Command Syntax and Usage Examples</h1>
+
+<h2>Substitute </h2>
+
+<p>The syntax and usage of <code>p</code> command has been demonstrated already. Let&#8217;s see <code>s</code> now.</p>
+
+<p>Syntax for <code>s</code> command is as follows&#8230;</p>
+
+<p style="text-align:center;"> <code>sed [-n] [address1[,address2]][!]s/search pattern/replacement pattern/[p][g]</code></p>
+
+<p>While it may seem really complex, it is very easy. Here is an example. Outputs are below each command as comments.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo </span>muthu <span class="p">|</span> sed -n <span class="s1">&#39;s/muthu/muthuraj/p&#39;</span>
+</span><span class='line'><span class="c">#muthuraj</span>
+</span><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;/John/,/of/s/John/John J./&#39;</span>
+</span><span class='line'><span class="c">#John J.</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;John John John John&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;s/John/Paul/&#39;</span>
+</span><span class='line'><span class="c">#Paul John John John</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;John John John John&quot;</span> <span class="p">|</span> sed -n <span class="s1">&#39;s/John/Paul/g&#39;</span>
+</span><span class='line'><span class="c">#Paul Paul Paul Paul</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Don&#8217;t worry if you don&#8217;t understand these&#8230; We will see a primer on regular expressions soon&#8230;(I know it should&#8217;ve beeen first. Sorry!!) Watch out for the session announcement..</p>
+
+<figure class='code'><figcaption><span>Substituting using regular expressions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> <span class="s2">&quot;This is a sentence&quot;</span> <span class="p">|</span> sed <span class="s1">&#39;s/\(^[A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/p&#39;</span> <span class="c"># swap first two words</span>
+</span><span class='line'><span class="c">#is This a sentence</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;This is a sentence&quot;</span> <span class="p">|</span> sed <span class="s1">&#39;s/\([A-Za-z][a-z]*\) \([a-z][a-z]*\)/\2 \1/gp&#39;</span> <span class="c"># swap all word pairs</span>
+</span><span class='line'><span class="c">#is This sentence a</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can combine address ranges in above commands and have the words swapped over a range of lines or lines that have a certain pattern.</p>
+
+<h2>Change</h2>
+
+<p>Syntax for change <code>c</code> command is as follows&#8230;
+ <code>sed [address1[,address2]]c\
+    replacement text</code></p>
+
+<figure class='code'><figcaption><span>Change in sed</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;John\nConnor\nis\nthe\nleader\nof\nresistance&quot;</span> <span class="p">|</span> sed  <span class="s1">&#39;/John/,/of/c\</span>
+</span><span class='line'><span class="s1">Changed&#39;</span>
+</span><span class='line'><span class="c">#Changed</span>
+</span><span class='line'><span class="c">#of</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that All of the lines in the given range are changed to the gicen text. You can have multiple lines of replacement text. Also after the <code>\</code> you should press <code>Enter</code> before entering the replacement text.</p>
+
+<h2><code>y</code> Command</h2>
+
+<p>This is somewhat akin to the <code>tr</code> command in unix&#8230;.</p>
+
+<p>Syntax for <code>y</code> command is as follows&#8230;</p>
+
+<p style="text-align:center;"> <code>sed [address1[,address2]]y/search/replacement/p</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> -e <span class="s2">&quot;java&quot;</span> <span class="p">|</span> sed y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/
+</span><span class='line'><span class="c">#JAVA</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Above command changes from lowercase to uppercase.
+Characters in search pattern are replaced by corresponding characters in replacement pattern.</p>
+
+<p>We will see more later&#8230; Comment if you have feedback/doubts&#8230; :)</p>
+
+<p>Many thanks to Loshmitha for proof-reading&#8230;.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Muthu Raj</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-01-20T18:07:38+05:30'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:07 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/commandline/'>commandline</a>, <a class='category' href='/blog/categories/linux/'>linux</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://muthusblog.com/blog/2015/01/20/sed-a-microprimer/" data-via="" data-counturl="http://muthusblog.com/blog/2015/01/20/sed-a-microprimer/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/01/19/the-story-of-operating-systems/" title="Previous Post: The story of Operating systems">&laquo; The story of Operating systems</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/02/07/understanding-fork-and-exec/" title="Next Post: Understanding fork() and exec()">Understanding fork() and exec() &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+</div>
+
+      </div><!-- /div#content -->
+    </div><!-- /div#main -->
+  </div><!-- /div.container -->
+  <footer>
+<div id="footer-first" class="footer-widget">
+    <h3>About Me</h3>
+    <section class="about-me">
+      
+        <img class="icon-image" src="https://secure.gravatar.com/avatar/63682f9f22d49c62c53a968b253eedab.jp://secure.gravatar.com/avatar/63682f9f22d49c62c53a968b253eedab.png?s=240" alt="icon_image">
+      
+      <div>
+        <ul>
+          
+            <li>GitHub: <a href="https://github.com/mtmr">@mtmr</a></li>
+          
+          
+            <li>Blog: <a href="http://muthusblog.com">http://muthusblog.com</a></li>
+        </ul>
+        <p>
+          Will code for Chinese food, comfortable chair and Internet
+        </p>
+      </div>
+    </section>
+  </div><!-- /div#footer-second -->
+<div id="credit" role="contentinfo">
+  <p>
+    <a href="mailto:muthu.raj@outlook.com">Muthu Raj</a> -
+    <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> | Themed with Customized <a href="https://github.com/haya14busa/mjolvim-octotheme">Mjolvim</a></span> 
+  </p>
+</div>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a>
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'muthuraj';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://muthusblog.com/blog/2015/01/20/sed-a-microprimer/';
+        var disqus_url = 'http://muthusblog.com/blog/2015/01/20/sed-a-microprimer/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'https://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>
