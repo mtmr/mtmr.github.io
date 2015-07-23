@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<channel>
+		<title>muthuraj thangavel</title>
+		<description>muthu, life, computers and ceg</description>		
+		<link>http://mtmr.github.io</link>
+		<atom:link href="http://mtmr.github.io/feed.xml" rel="self" type="application/rss+xml" />
+		
+			<item>
+				<title>Hello World</title>
+				        
+				
+					<description>
+</description>
+				
+				<pubDate>Wed, 22 Jul 2015 17:30:00 +0530</pubDate>
+				<link>http://mtmr.github.io/2015/07/22/hello-world.html</link>
+				<guid isPermaLink="true">http://mtmr.github.io/2015/07/22/hello-world.html</guid>
+			</item>
+		
+	</channel>
+</rss>
